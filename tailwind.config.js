@@ -51,6 +51,9 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        fmp: "hsl(var(--fmp))",
+        urgente: "hsl(var(--urgente))"
+        
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -66,10 +69,15 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "teste-vermelho-branco":{
+          "0%,100%":{"background-color": "var(--background)"},
+          "50%":{"background-color": "var(--destructive)"}
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "teste-vermelho-branco": "teste-vermelho-branco 0.5s infinity"
       },
     },
   },
