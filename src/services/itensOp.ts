@@ -1,10 +1,13 @@
 import type { IItemOp, PostItemOPRequest } from "@/types/itensOp";
+import { createBasicAuthHeader } from "./identity";
 
-const baseUrl = "http://192.168.2.223:5000/api/itensOp/";
+// const baseUrl = "http://192.168.2.223:5000/api/itensOp/";
+const baseUrl = "http://localhost:5000/api/itensOp";
 
 export async function getItensOp(): Promise<IItemOp[]> {
 	try {
-		const response = await fetch(baseUrl);
+		const headers = await createBasicAuthHeader();
+		const response = await fetch(baseUrl, { headers });
 		console.log(response);
 		if (!response.ok) {
 			throw new Error(`erro status: ${response.status}`);
@@ -19,8 +22,9 @@ export async function getItensOp(): Promise<IItemOp[]> {
 
 export async function getItensOpsById(id: string): Promise<IItemOp> {
 	try {
+		const headers = await createBasicAuthHeader();
 		const url = `${baseUrl}/${id}`;
-		const response = await fetch(url);
+		const response = await fetch(url, { headers });
 		if (!response.ok) {
 			throw new Error(`erro status: ${response.status}`);
 		}
@@ -33,12 +37,13 @@ export async function getItensOpsById(id: string): Promise<IItemOp> {
 }
 
 export async function saveItemOpApi(item: PostItemOPRequest) {
+	const headers = await createBasicAuthHeader();
+	headers.append("Content-Type", "application/json");
+	console.log();
 	const body = JSON.stringify(item);
 	const response = await fetch(baseUrl, {
 		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
+		headers,
 		body: body,
 	});
 	if (!response.ok) {
@@ -47,13 +52,13 @@ export async function saveItemOpApi(item: PostItemOPRequest) {
 }
 
 export async function putItemOpApi(item: PostItemOPRequest, id: string) {
+	const headers = await createBasicAuthHeader();
+	headers.append("Content-Type", "application/json");
 	const base = `${baseUrl}/${id}`;
 	const body = JSON.stringify(item);
 	const response = await fetch(base, {
 		method: "PUT",
-		headers: {
-			"Content-Type": "application/json",
-		},
+		headers,
 		body: body,
 	});
 	if (!response.ok) {
@@ -62,8 +67,9 @@ export async function putItemOpApi(item: PostItemOPRequest, id: string) {
 }
 
 export async function deleteItemOpApi(id: string) {
+	const headers = await createBasicAuthHeader();
 	const base = `${baseUrl}/${id}`;
-	const response = await fetch(base, { method: "DELETE" });
+	const response = await fetch(base, { method: "DELETE", headers });
 	if (!response.ok) {
 		alert(response.status);
 		throw new Error(`Erro ao deletar o item, Status: ${response.status}`);

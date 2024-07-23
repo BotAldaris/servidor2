@@ -13,7 +13,6 @@ const columns = [
 ];
 
 function mapaHorasParaDadosGantt(mapaHoras: IMapaHora[]) {
-	console.log(mapaHoras);
 	const dados = [];
 	for (let index = 0; index < mapaHoras.length; index++) {
 		const mapa = mapaHoras[index];
@@ -49,7 +48,6 @@ function mapaHorasParaDadosGantt(mapaHoras: IMapaHora[]) {
 			]);
 		}
 	}
-	console.log(dados);
 	return dados;
 }
 
@@ -64,7 +62,7 @@ export const options = {
 };
 export default function MapaGanttChart(props: IProps) {
 	const dados = [columns, ...mapaHorasParaDadosGantt(props.mapaHoras)];
-	console.log(dados);
+	console.log("recarregado");
 	if (dados.length === 1) {
 		return <div />;
 	}

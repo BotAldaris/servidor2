@@ -61,10 +61,11 @@ function OpForm() {
 			await saveOpApi({ ...values, status: "Programando" });
 			navigate("/ops", { replace: true });
 		} catch (e) {
+			const b = e as Error;
 			toast({
 				variant: "destructive",
 				title: "Erro ao salvar a op",
-				description: `Erro: ${e}`,
+				description: `Erro: ${b.message}`,
 			});
 			console.log("oi");
 			console.log(e);

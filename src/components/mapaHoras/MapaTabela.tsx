@@ -10,8 +10,8 @@ import {
 import type IMapaHora from "@/types/mapaHoras";
 import { addHours, intervalToDuration } from "date-fns";
 import CelulaCliente from "./CelulaCliente";
-import { map } from "zod";
 import { XIcon } from "lucide-react";
+import MapaOpDialog from "./MapaOpDialog";
 
 interface IProps {
 	mapa: IMapaHora[];
@@ -54,7 +54,9 @@ export default function MapaTable(props: IProps) {
 			<TableBody>
 				{props.mapa.map((mapa) => (
 					<TableRow key={mapa.id}>
-						<TableCell className="font-medium">{mapa.numeroOp}</TableCell>
+						<TableCell className="font-medium">
+							<MapaOpDialog numero={mapa.numeroOp} tipo="" opId={mapa.opId} />
+						</TableCell>
 						<CelulaCliente mapa={mapa} text={mapa.cliente} />
 						<TableCell>
 							{mapa.dataLiberacao

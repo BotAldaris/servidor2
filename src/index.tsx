@@ -12,6 +12,9 @@ import MapaHorasIndex, {
 	loader as mapaHorasLoader,
 } from "./routes/ops/mapaHoras";
 import AdicionarMapa from "./routes/ops/mapaHoras/adicionar";
+import Login from "./routes/login/login";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import Registrar from "./routes/login/register";
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -23,8 +26,20 @@ const queryClient = new QueryClient({
 
 const router = createBrowserRouter([
 	{
+		path: "/login",
+		element: <Login />,
+	},
+	{
+		path: "/register",
+		element: <Registrar />,
+	},
+	{
 		path: "/",
-		element: <Root />,
+		element: (
+			<ProtectedRoute>
+				<Root />
+			</ProtectedRoute>
+		),
 		errorElement: <PaginaErro />,
 		children: [
 			{

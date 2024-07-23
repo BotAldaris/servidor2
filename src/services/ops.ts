@@ -1,12 +1,14 @@
 import type Op from "@/types/op";
 import type { GetOPResult, PostOPRequest } from "@/types/op";
+import { createBasicAuthHeader } from "./identity";
 
-const baseUrl = "http://192.168.2.223:5000/api/ops";
+// const baseUrl = "http://192.168.2.223:5000/api/ops";
+const baseUrl = "http://localhost:5000/api/ops";
 
 export async function getOps(): Promise<Op[]> {
 	try {
-		const response = await fetch(baseUrl);
-		console.log(response);
+		const header = await createBasicAuthHeader();
+		const response = await fetch(baseUrl, { headers: header });
 		if (!response.ok) {
 			throw new Error(`erro status: ${response.status}`);
 		}
@@ -21,11 +23,13 @@ export async function getOps(): Promise<Op[]> {
 export async function getOpsById(id: string): Promise<Op> {
 	try {
 		const url = `${baseUrl}/${id}`;
-		const response = await fetch(url);
+		const header = await createBasicAuthHeader();
+		const response = await fetch(url, { headers: header });
 		if (!response.ok) {
 			throw new Error(`erro status: ${response.status}`);
 		}
 		const op = (await response.json()) as Op;
+		console.log(op);
 		return op;
 	} catch (e) {
 		console.log(e);
@@ -34,12 +38,12 @@ export async function getOpsById(id: string): Promise<Op> {
 }
 
 export async function saveOpApi(op: PostOPRequest) {
+	const header = await createBasicAuthHeader();
+	header.append("Content-Type", "application/json");
 	const body = JSON.stringify(op);
 	const response = await fetch(baseUrl, {
 		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
+		headers: header,
 		body: body,
 	});
 	if (!response.ok) {
@@ -48,13 +52,13 @@ export async function saveOpApi(op: PostOPRequest) {
 }
 
 export async function putOpApi(op: PostOPRequest, id: string) {
+	const header = await createBasicAuthHeader();
+	header.append("Content-Type", "application/json");
 	const base = `${baseUrl}/${id}`;
 	const body = JSON.stringify(op);
 	const response = await fetch(base, {
 		method: "PUT",
-		headers: {
-			"Content-Type": "application/json",
-		},
+		headers: header,
 		body: body,
 	});
 	if (!response.ok) {
@@ -63,8 +67,9 @@ export async function putOpApi(op: PostOPRequest, id: string) {
 }
 
 export async function deleteOpApi(id: string) {
+	const header = await createBasicAuthHeader();
 	const base = `${baseUrl}/${id}`;
-	const response = await fetch(base, { method: "DELETE" });
+	const response = await fetch(base, { method: "DELETE", headers: header });
 	if (!response.ok) {
 		alert(response.status);
 		throw new Error(`Erro ao deletar o op, Status: ${response.status}`);

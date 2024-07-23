@@ -2,18 +2,40 @@ import { Button } from "@/components/ui/button";
 
 import DatePicker from "../datePicker";
 import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
-import { addDays, type Duration, subDays } from "date-fns";
+import {
+	addDays,
+	addHours,
+	type Duration,
+	intervalToDuration,
+	subDays,
+} from "date-fns";
 import { useNavigate } from "react-router-dom";
 import TempoTotalCard from "./TempoTotalCard";
+import type IMapaHora from "@/types/mapaHoras";
 
 interface IProps {
 	date: Date | undefined;
 	setDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
-	duracao: Duration;
+	dados: IMapaHora[] | undefined;
+}
+
+function mapaParaDuracao(dados: IMapaHora[], dataI: Date): Duration {
+	let total = 0;
+	for (const mapa of dados) {
+		total += mapa.valorCorte;
+	}
+	return intervalToDuration({
+		start: dataI,
+		end: addHours(dataI, total / 500),
+	});
 }
 
 export default function MapaTopBar(props: IProps) {
+	if (props.dados === undefined) {
+		return;
+	}
 	const navigate = useNavigate();
+	const duracao = mapaParaDuracao(props.dados, props.date ?? new Date());
 	return (
 		<div className="flex flex-row justify-around content-center	">
 			<div />
@@ -43,7 +65,7 @@ export default function MapaTopBar(props: IProps) {
 					<Plus className="h-4 w-4" />
 				</Button>
 			</div>
-			<TempoTotalCard duracao={props.duracao} />
+			<TempoTotalCard duracao={duracao} />
 		</div>
 	);
 }

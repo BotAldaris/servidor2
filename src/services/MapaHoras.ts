@@ -1,11 +1,14 @@
 import type IMapaHora from "@/types/mapaHoras";
 import type { GetMapaHora, PostMapaHoraRequest } from "@/types/mapaHoras";
+import { createBasicAuthHeader } from "./identity";
 
-const baseUrl = "http://192.168.2.223:5000/api/mapaHoras";
+// const baseUrl = "http://192.168.2.223:5000/api/mapaHoras";
+const baseUrl = "http://localhost:5000/api/mapaHoras";
 
 export async function getMapaHoras(): Promise<IMapaHora[]> {
 	try {
-		const response = await fetch(baseUrl);
+		const header = await createBasicAuthHeader();
+		const response = await fetch(baseUrl, { headers: header });
 		console.log(response);
 		if (!response.ok) {
 			throw new Error(`erro status: ${response.status}`);
@@ -20,8 +23,9 @@ export async function getMapaHoras(): Promise<IMapaHora[]> {
 
 export async function getMapaHoraById(id: string): Promise<IMapaHora> {
 	try {
+		const header = await createBasicAuthHeader();
 		const url = `${baseUrl}/${id}`;
-		const response = await fetch(url);
+		const response = await fetch(url, { headers: header });
 		if (!response.ok) {
 			throw new Error(`erro status: ${response.status}`);
 		}
@@ -34,9 +38,10 @@ export async function getMapaHoraById(id: string): Promise<IMapaHora> {
 }
 export async function getMapaHorasByData(data: Date): Promise<IMapaHora[]> {
 	try {
+		const headers = await createBasicAuthHeader();
 		const url = `${baseUrl}?data=${data.toISOString()}`;
 		console.log(url);
-		const response = await fetch(url);
+		const response = await fetch(url, { headers });
 		if (!response.ok) {
 			throw new Error(`erro status: ${response.status}`);
 		}
@@ -49,11 +54,11 @@ export async function getMapaHorasByData(data: Date): Promise<IMapaHora[]> {
 }
 export async function saveMapaHoraApi(mapa: PostMapaHoraRequest) {
 	const body = JSON.stringify(mapa);
+	const headers = await createBasicAuthHeader();
+	headers.append("Content-Type", "application/json");
 	const response = await fetch(baseUrl, {
 		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
+		headers,
 		body: body,
 	});
 	if (!response.ok) {
@@ -64,13 +69,13 @@ export async function saveMapaHoraApi(mapa: PostMapaHoraRequest) {
 }
 
 export async function putOpMapaApi(mapa: PostMapaHoraRequest, id: string) {
+	const headers = await createBasicAuthHeader();
+	headers.append("Content-Type", "application/json");
 	const base = `${baseUrl}/${id}`;
 	const body = JSON.stringify(mapa);
 	const response = await fetch(base, {
 		method: "PUT",
-		headers: {
-			"Content-Type": "application/json",
-		},
+		headers,
 		body: body,
 	});
 	if (!response.ok) {
@@ -79,8 +84,9 @@ export async function putOpMapaApi(mapa: PostMapaHoraRequest, id: string) {
 }
 
 export async function deleteMapaApi(id: string) {
+	const headers = await createBasicAuthHeader();
 	const base = `${baseUrl}/${id}`;
-	const response = await fetch(base, { method: "DELETE" });
+	const response = await fetch(base, { method: "DELETE", headers });
 	if (!response.ok) {
 		alert(response.status);
 		throw new Error(`Erro ao deletar o op, Status: ${response.status}`);
