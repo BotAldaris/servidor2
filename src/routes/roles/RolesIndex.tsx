@@ -15,7 +15,7 @@ const roleListQuery = () =>
 	queryOptions({ queryKey: ["roles"], queryFn: () => getRoles() });
 
 export const loader = (queryClient: QueryClient) => async () => {
-	await queryClient.ensureQueryData(roleListQuery());
+	return await queryClient.ensureQueryData(roleListQuery());
 };
 
 export default function RolesIndex() {

@@ -39,8 +39,11 @@ export function DataTable<TData, TValue>({
 		getPaginationRowModel: getPaginationRowModel(),
 		onSortingChange: setSorting,
 		getSortedRowModel: getSortedRowModel(),
+		onColumnFiltersChange: setColumnFilters,
+		getFilteredRowModel: getFilteredRowModel(),
 		state: {
 			sorting,
+			columnFilters,
 		},
 	});
 
@@ -48,10 +51,10 @@ export function DataTable<TData, TValue>({
 		<div>
 			<div className="flex items-center py-4">
 				<Input
-					placeholder="Filter emails..."
-					value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+					placeholder="Filtrar cargos..."
+					value={(table.getColumn("nome")?.getFilterValue() as string) ?? ""}
 					onChange={(event) =>
-						table.getColumn("email")?.setFilterValue(event.target.value)
+						table.getColumn("nome")?.setFilterValue(event.target.value)
 					}
 					className="max-w-sm"
 				/>
@@ -99,7 +102,7 @@ export function DataTable<TData, TValue>({
 									colSpan={columns.length}
 									className="h-24 text-center"
 								>
-									No results.
+									Nenhum resultado.
 								</TableCell>
 							</TableRow>
 						)}

@@ -1,7 +1,7 @@
 import type { Logar, Tokens } from "@/types/Roles";
 import { addSeconds } from "date-fns";
 
-const baseUrl = "http://localhost:5000/api/";
+const baseUrl = "http://192.168.2.223:5000/api/";
 export const isAuthenticated = () => !!localStorage.getItem("refresh_token");
 
 function setTokens(dados: Tokens, data: Date) {
@@ -13,7 +13,7 @@ function setTokens(dados: Tokens, data: Date) {
 	);
 }
 
-function resetTokens() {
+export function resetTokens() {
 	localStorage.removeItem("acesss_token");
 	localStorage.removeItem("refresh_token");
 	localStorage.removeItem("expire");
@@ -87,17 +87,23 @@ export async function logar(dados: Logar) {
 	setTokens(result, data);
 }
 export async function register(dados: Logar) {
-	const url = `${baseUrl}register`;
-	const body = JSON.stringify(dados);
-	const response = await fetch(url, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: body,
-	});
-	if (!response.ok) {
-		const text = await response.text();
-		throw `Erro ao registrar: ${text}`;
+	try {
+		const url = `${baseUrl}register`;
+		const body = JSON.stringify(dados);
+		const response = await fetch(url, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: body,
+		});
+		console.log(response.status);
+		if (!response.ok) {
+			const text = await response.text();
+			throw `Erro ao registrar: ${text}`;
+		}
+		console.log("oi");
+	} catch (e) {
+		console.log(e);
 	}
 }

@@ -15,6 +15,12 @@ import AdicionarMapa from "./routes/ops/mapaHoras/adicionar";
 import Login from "./routes/login/login";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Registrar from "./routes/login/register";
+import RolesIndex, {
+	loader as rolesIndexLoader,
+} from "./routes/roles/RolesIndex";
+import AdicionarRole from "./routes/roles/adicionar/AdicionarRole";
+import AdicionarRoleParaAlguem from "./routes/roles/adicionar/AdicionarRoleParaAlguem";
+import Logout from "./routes/login/logout";
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -32,6 +38,10 @@ const router = createBrowserRouter([
 	{
 		path: "/register",
 		element: <Registrar />,
+	},
+	{
+		path: "/logout",
+		element: <Logout />,
 	},
 	{
 		path: "/",
@@ -63,6 +73,19 @@ const router = createBrowserRouter([
 			{
 				path: "ops/mapahoras/adicionar",
 				element: <AdicionarMapa />,
+			},
+			{
+				path: "roles",
+				element: <RolesIndex />,
+				loader: rolesIndexLoader(queryClient),
+			},
+			{
+				path: "roles/adicionar",
+				element: <AdicionarRole />,
+			},
+			{
+				path: "roles/user/adicionar",
+				element: <AdicionarRoleParaAlguem />,
 			},
 		],
 	},

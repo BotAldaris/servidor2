@@ -2,8 +2,8 @@ import type Op from "@/types/op";
 import type { GetOPResult, PostOPRequest } from "@/types/op";
 import { createBasicAuthHeader } from "./identity";
 
-// const baseUrl = "http://192.168.2.223:5000/api/ops";
-const baseUrl = "http://localhost:5000/api/ops";
+const baseUrl = "http://192.168.2.223:5000/api/ops";
+// const baseUrl = "http://localhost:5000/api/ops";
 
 export async function getOps(): Promise<Op[]> {
 	try {
