@@ -39,11 +39,11 @@ export default function TempoTotalCard(props: IProps) {
 			<CardHeader className="space-y-0 pb-0">
 				<CardDescription>Tempo Total</CardDescription>
 				<CardTitle className="flex items-baseline gap-1 text-4xl tabular-nums">
-					{props.duracao.hours == null ? "" : props.duracao.hours}
+					{props.duracao.hours == null ? "00" : props.duracao.hours}
 					<span className="font-sans text-sm font-normal tracking-normal text-muted-foreground">
 						hr
 					</span>
-					{props.duracao.hours == null ? "" : props.duracao.minutes}
+					{props.duracao.hours == null ? "00" : props.duracao.minutes}
 					<span className="font-sans text-sm font-normal tracking-normal text-muted-foreground">
 						min
 					</span>

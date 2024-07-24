@@ -2,6 +2,7 @@ import Loading from "@/components/Loading";
 import MapaGanttChart from "@/components/mapaHoras/MapaGanttChart";
 import MapaTable from "@/components/mapaHoras/MapaTabela";
 import MapaTopBar from "@/components/mapaHoras/MapaTopBar";
+import { Button } from "@/components/ui/button";
 import { getMapaHorasByData } from "@/services/MapaHoras";
 import type IMapaHora from "@/types/mapaHoras";
 import {
@@ -12,7 +13,6 @@ import {
 	type QueryClient,
 } from "@tanstack/react-query";
 import { useState } from "react";
-import { Button } from "react-day-picker";
 
 const mapaHorasListQuery = (data: Date) =>
 	queryOptions({
