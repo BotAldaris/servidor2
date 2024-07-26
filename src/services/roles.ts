@@ -2,7 +2,8 @@ import type Roles from "@/types/Roles";
 import type { PostAddRoleToUser, PostRole } from "@/types/Roles";
 import { createBasicAuthHeader } from "./identity";
 
-const baseUrl = "http://192.168.2.223:5000/api/roles";
+// const baseUrl = "http://192.168.2.223:5000/api/roles";
+const baseUrl = "http://localhost:5000/api/roles";
 
 export async function getRoles(): Promise<Roles[]> {
 	try {
@@ -19,7 +20,6 @@ export async function getRoles(): Promise<Roles[]> {
 		throw new Error(`Erro ao pegar os cargos, erro: ${e}`);
 	}
 }
-
 export async function saveRole(role: PostRole) {
 	const headers = await createBasicAuthHeader();
 	headers.append("Content-Type", "application/json");

@@ -1,9 +1,9 @@
 import type Op from "@/types/op";
-import type { GetOPResult, PostOPRequest } from "@/types/op";
+import type { EditItemOPResult, GetOPResult, PostOPRequest } from "@/types/op";
 import { createBasicAuthHeader } from "./identity";
 
-const baseUrl = "http://192.168.2.223:5000/api/ops";
-// const baseUrl = "http://localhost:5000/api/ops";
+// const baseUrl = "http://192.168.2.223:5000/api/ops";
+const baseUrl = "http://localhost:5000/api/ops";
 
 export async function getOps(): Promise<Op[]> {
 	try {
@@ -73,6 +73,24 @@ export async function deleteOpApi(id: string) {
 	if (!response.ok) {
 		alert(response.status);
 		throw new Error(`Erro ao deletar o op, Status: ${response.status}`);
+	}
+}
+
+export async function getItensOpsByIdFilterByRole(
+	id: string,
+): Promise<EditItemOPResult> {
+	try {
+		const headers = await createBasicAuthHeader();
+		const url = `${baseUrl}/${id}/itens?filtrarPorCargo=${true}`;
+		const response = await fetch(url, { headers });
+		if (!response.ok) {
+			throw new Error(`erro status: ${response.status}`);
+		}
+		const op = (await response.json()) as EditItemOPResult;
+		return op;
+	} catch (e) {
+		console.log(e);
+		throw new Error(`Erro ao pegar os itens, erro: ${e}`);
 	}
 }
 

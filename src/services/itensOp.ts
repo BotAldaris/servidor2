@@ -1,8 +1,9 @@
 import type { IItemOp, PostItemOPRequest } from "@/types/itensOp";
 import { createBasicAuthHeader } from "./identity";
+import type { StatusItemOp } from "@/types/op";
 
-const baseUrl = "http://192.168.2.223:5000/api/itensOp/";
-// const baseUrl = "http://localhost:5000/api/itensOp";
+// const baseUrl = "http://192.168.2.223:5000/api/itensOp/";
+const baseUrl = "http://localhost:5000/api/itensOp";
 
 export async function getItensOp(): Promise<IItemOp[]> {
 	try {
@@ -65,7 +66,27 @@ export async function putItemOpApi(item: PostItemOPRequest, id: string) {
 		throw new Error(`Erro ao atualizar o item, Status: " + response.status`);
 	}
 }
-
+export async function putStatusItensOpApi(itens: StatusItemOp[]) {
+	const headers = await createBasicAuthHeader();
+	console.log(itens);
+	headers.append("Content-Type", "application/json");
+	const responses = await Promise.all(
+		itens.map(async (x) =>
+			fetch(`${baseUrl}/${x.id}`, {
+				method: "PUT",
+				headers,
+				body: JSON.stringify(x),
+			}),
+		),
+	);
+	for (const response of responses) {
+		if (!response.ok) {
+			const erro = await response.text();
+			throw new Error(`Erro ao atualizar os itens: ${erro}`);
+		}
+	}
+	console.log("oi");
+}
 export async function deleteItemOpApi(id: string) {
 	const headers = await createBasicAuthHeader();
 	const base = `${baseUrl}/${id}`;

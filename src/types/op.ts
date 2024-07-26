@@ -31,3 +31,19 @@ export type GetOPResult = {
 	tipo: typeof tipoEnum;
 	itens: IItemOp[];
 };
+
+export interface StatusItemOp {
+	id: string;
+	codigo: string;
+	quantidade: number;
+	programado: boolean | null;
+	cortado: boolean | null;
+	dobrado: boolean | null;
+	usinado: boolean | null;
+	calderado: boolean | null;
+}
+
+export interface EditItemOPResult {
+	show: string[];
+	item: StatusItemOp[];
+}
