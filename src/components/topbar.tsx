@@ -25,14 +25,19 @@ const ops: { title: string; href: string; description: string }[] = [
 		description: "Adicione uma OP.",
 	},
 	{
+		title: "Resumo",
+		href: "/ops/resumo",
+		description: "Todas as OPs em um lugar.",
+	},
+	{
 		title: "Adicionar Item",
 		href: "/ops/item/adicionar",
 		description: "Adicionar Item em uma OP.",
 	},
 	{
-		title: "Resumo",
-		href: "/ops/resumo",
-		description: "Todas as OPs em um lugar.",
+		title: "Pdf",
+		href: "/ops/pdf",
+		description: "Ache o pdf de uma op ou plano de corte",
 	},
 ];
 

@@ -2,8 +2,8 @@ import type IMapaHora from "@/types/mapaHoras";
 import type { GetMapaHora, PostMapaHoraRequest } from "@/types/mapaHoras";
 import { createBasicAuthHeader } from "./identity";
 
-// const baseUrl = "http://192.168.2.223:5000/api/mapaHoras";
-const baseUrl = "http://localhost:5000/api/mapaHoras";
+const baseUrl = "http://192.168.2.223:5000/api/mapaHoras";
+// const baseUrl = "http://localhost:5000/api/mapaHoras";
 
 export async function getMapaHoras(): Promise<IMapaHora[]> {
   try {

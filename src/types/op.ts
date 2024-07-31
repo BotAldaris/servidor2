@@ -1,66 +1,71 @@
 import type { IItemOp } from "./itensOp";
 import type { tipoEnum } from "./tipoEnum";
 type Op = {
-  id: string;
-  numero: string;
-  cliente: string;
-  dataLiberacao: Date;
-  dataEntrega: Date;
-  status: string;
-  tipo: typeof tipoEnum;
-  itens: IItemOp[];
+	id: string;
+	numero: string;
+	cliente: string;
+	dataLiberacao: Date;
+	dataEntrega: Date;
+	status: string;
+	tipo: typeof tipoEnum;
+	itens: IItemOp[];
 };
 export default Op;
 
 export type PostOPRequest = {
-  numero: string;
-  cliente: string;
-  dataLiberacao: Date;
-  dataEntrega: Date;
-  tipo: string;
-  status: string;
+	numero: string;
+	cliente: string;
+	dataLiberacao: Date;
+	dataEntrega: Date;
+	tipo: string;
+	status: string;
 };
 
 export type GetOPResult = {
-  id: string;
-  numero: string;
-  cliente: string;
-  dataLiberacao: string;
-  dataEntrega: string;
-  status: string;
-  tipo: typeof tipoEnum;
-  itens: IItemOp[];
+	id: string;
+	numero: string;
+	cliente: string;
+	dataLiberacao: string;
+	dataEntrega: string;
+	status: string;
+	tipo: typeof tipoEnum;
+	itens: IItemOp[];
 };
 export type NumerosOps = {
-  id: string;
-  numero: string;
+	id: string;
+	numero: string;
 };
 export type GetOpResumoResult = {
-  id: string;
-  numero: string;
-  cliente: string;
-  dataEntrega: string;
-  status: string;
+	id: string;
+	numero: string;
+	cliente: string;
+	dataEntrega: string;
+	status: string;
 };
 export type OpResumo = {
-  id: string;
-  numero: string;
-  cliente: string;
-  dataEntrega: Date;
-  status: string;
+	id: string;
+	numero: string;
+	cliente: string;
+	dataEntrega: Date;
+	status: string;
 };
 export interface StatusItemOp {
-  id: string;
-  codigo: string;
-  quantidade: number;
-  programado: boolean | null;
-  cortado: boolean | null;
-  dobrado: boolean | null;
-  usinado: boolean | null;
-  calderado: boolean | null;
+	id: string;
+	codigo: string;
+	quantidade: number;
+	programado: boolean | null;
+	cortado: boolean | null;
+	dobrado: boolean | null;
+	usinado: boolean | null;
+	calderado: boolean | null;
 }
 
 export interface EditItemOPResult {
-  show: string[];
-  item: StatusItemOp[];
+	show: string[];
+	item: StatusItemOp[];
+}
+
+export interface PostPdf {
+	numero: string;
+	tipo: number;
 }
