@@ -9,6 +9,7 @@ import type {
 	PostPdf,
 } from "@/types/op";
 import { createBasicAuthHeader } from "./identity";
+import type { IItemOp } from "@/types/itensOp";
 
 const baseUrl = "http://192.168.2.223:5000/api/ops";
 // const baseUrl = "http://localhost:5000/api/ops";
@@ -157,7 +158,21 @@ export async function getItensOpsByIdFilterByRole(
 		throw new Error(`Erro ao pegar os itens, erro: ${e}`);
 	}
 }
-
+export async function getItensOpsByOpId(id: string): Promise<IItemOp[]> {
+	try {
+		const headers = await createBasicAuthHeader();
+		const url = `${baseUrl}/${id}/itens`;
+		const response = await fetch(url, { headers });
+		if (!response.ok) {
+			throw new Error(`erro status: ${response.status}`);
+		}
+		const op = (await response.json()) as IItemOp[];
+		return op;
+	} catch (e) {
+		console.log(e);
+		throw new Error(`Erro ao pegar os itens, erro: ${e}`);
+	}
+}
 function converterApiparaOp(opApi: GetOPResult[]): Op[] {
 	const result = [] as Op[];
 	for (const op of opApi) {

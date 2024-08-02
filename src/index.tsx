@@ -29,7 +29,7 @@ const AdicionarOP = lazy(() => import("./routes/ops/adicionar"));
 const AdicionarMapa = lazy(() => import("./routes/ops/mapaHoras/adicionar"));
 const AdicionarItemOP = lazy(() => import("./routes/ops/item/adicionar"));
 const AcharPdf = lazy(() => import("./routes/pdf/AcharPdf"));
-
+const FaturarOp = lazy(() => import("./routes/ops/faturar"));
 const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
@@ -77,6 +77,10 @@ const router = createBrowserRouter([
 			{
 				path: "ops/item/adicionar",
 				element: <AdicionarItemOP />,
+			},
+			{
+				path: "ops/faturar",
+				element: <FaturarOp />,
 			},
 			{
 				path: "ops/mapahoras",

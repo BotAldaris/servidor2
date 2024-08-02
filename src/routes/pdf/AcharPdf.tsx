@@ -49,7 +49,7 @@ function PdfIndex(props: IPropsPdfIndex) {
 			) : (
 				<div className="flex flex-col">
 					{data?.map((x) => (
-						<a key={x} href={x}>
+						<a key={x} href={x} target="_blank" rel="noreferrer">
 							{x}
 						</a>
 					))}
