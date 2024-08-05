@@ -1,15 +1,11 @@
+import { createFileRoute } from "@tanstack/react-router";
 import Loading from "@/components/Loading";
 import PdfForm from "@/components/pdf/PdfForm";
-import { Button } from "@/components/ui/button";
 import { getPDF } from "@/services/ops";
 import type { PostPdf } from "@/types/op";
-import {
-	type QueryObserverResult,
-	queryOptions,
-	type RefetchOptions,
-	useQuery,
-} from "@tanstack/react-query";
+import { queryOptions, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import ErrorText from "@/components/errorText";
 
 const acharPdfListQuery = (data: PostPdf) =>
 	queryOptions({
@@ -17,7 +13,7 @@ const acharPdfListQuery = (data: PostPdf) =>
 		queryFn: () => getPDF(data),
 	});
 
-export default function AcharPdf() {
+function AcharPdf() {
 	const [postPdf, setPostPdf] = useState<PostPdf>();
 	return (
 		<div className="flex flex-col justify-center items-center w-full">
@@ -45,7 +41,7 @@ function PdfIndex(props: IPropsPdfIndex) {
 			{isLoading ? (
 				<Loading />
 			) : isError ? (
-				<ErrorText refetch={refetch} />
+				<ErrorText refetch={refetch} texto="os links" />
 			) : (
 				<div className="flex flex-col">
 					{data?.map((x) => (
@@ -58,17 +54,7 @@ function PdfIndex(props: IPropsPdfIndex) {
 		</div>
 	);
 }
-interface IErrorProps {
-	refetch: (
-		options?: RefetchOptions,
-	) => Promise<QueryObserverResult<string[], Error>>;
-}
 
-function ErrorText(props: IErrorProps) {
-	return (
-		<div>
-			<p>Ocorreu um erro ao pegar os links, tente novamente.</p>
-			<Button onClick={() => props.refetch()}>Tentar Novamente</Button>
-		</div>
-	);
-}
+export const Route = createFileRoute("/ops/pdf")({
+	component: () => <AcharPdf />,
+});

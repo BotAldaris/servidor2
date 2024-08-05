@@ -1,18 +1,13 @@
+import { createFileRoute } from "@tanstack/react-router";
 import Loading from "@/components/Loading";
 import MapaGanttChart from "@/components/mapaHoras/MapaGanttChart";
 import MapaTable from "@/components/mapaHoras/MapaTabela";
 import MapaTopBar from "@/components/mapaHoras/MapaTopBar";
-import { Button } from "@/components/ui/button";
 import { getMapaHorasByData } from "@/services/MapaHoras";
 import type IMapaHora from "@/types/mapaHoras";
-import {
-	type QueryObserverResult,
-	queryOptions,
-	type RefetchOptions,
-	useQuery,
-	type QueryClient,
-} from "@tanstack/react-query";
+import { queryOptions, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import ErrorText from "@/components/errorText";
 
 const mapaHorasListQuery = (data: Date) =>
 	queryOptions({
@@ -20,13 +15,7 @@ const mapaHorasListQuery = (data: Date) =>
 		queryFn: () => getMapaHorasByData(data),
 	});
 
-export const loader = (queryClient: QueryClient) => async () => {
-	const data = new Date();
-	data.setHours(0, 0, 0, 0);
-	return await queryClient.ensureQueryData(mapaHorasListQuery(data));
-};
-
-export default function MapaHorasIndex() {
+function MapaHorasIndex() {
 	const dataI = new Date();
 	dataI.setHours(0, 0, 0, 0);
 	const [date, setDate] = useState<Date | undefined>(dataI);
@@ -38,7 +27,7 @@ export default function MapaHorasIndex() {
 			{isLoading ? (
 				<Loading />
 			) : isError ? (
-				<ErrorText refetch={refetch} />
+				<ErrorText refetch={refetch} texto="os itens da op" />
 			) : (
 				<div>
 					<MapaTopBar date={date} setDate={setDate} dados={data} />
@@ -52,17 +41,9 @@ export default function MapaHorasIndex() {
 	);
 }
 
-interface IErrorProps {
-	refetch: (
-		options?: RefetchOptions,
-	) => Promise<QueryObserverResult<IMapaHora[], Error>>;
-}
-
-function ErrorText(props: IErrorProps) {
-	return (
-		<div>
-			<p>Ocorreu um erro ao pegar os itens da op, tente novamente.</p>
-			<Button onClick={() => props.refetch()}>Tentar Novamente</Button>
-		</div>
-	);
-}
+export const Route = createFileRoute("/ops/mapahoras/")({
+	loader: ({ context: { queryClient } }) => {
+		queryClient.ensureQueryData(mapaHorasListQuery(new Date()));
+	},
+	component: () => <MapaHorasIndex />,
+});

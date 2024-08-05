@@ -1,22 +1,16 @@
+import { createFileRoute } from "@tanstack/react-router";
 import { DataTableColumnHeader } from "@/components/DataTableColumnHeader";
 import ResumoOpTable from "@/components/ops/ResumoOpTable";
 import { getResumoOps } from "@/services/ops";
 import type { OpResumo } from "@/types/op";
-import {
-	type QueryClient,
-	queryOptions,
-	useSuspenseQuery,
-} from "@tanstack/react-query";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import type { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 const resumoOpListQuery = () =>
 	queryOptions({ queryKey: ["resumo", "OP"], queryFn: () => getResumoOps() });
 
-export const loader = (queryClient: QueryClient) => async () => {
-	return await queryClient.ensureQueryData(resumoOpListQuery());
-};
-export default function ResumoOpIndex() {
+function ResumoOpIndex() {
 	const { data } = useSuspenseQuery(resumoOpListQuery());
 	const columns: ColumnDef<OpResumo>[] = [
 		{
@@ -54,3 +48,10 @@ export default function ResumoOpIndex() {
 		</div>
 	);
 }
+
+export const Route = createFileRoute("/ops/resumo")({
+	loader: ({ context: { queryClient } }) => {
+		queryClient.ensureQueryData(resumoOpListQuery());
+	},
+	component: () => <ResumoOpIndex />,
+});

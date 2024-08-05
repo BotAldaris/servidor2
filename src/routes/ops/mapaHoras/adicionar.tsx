@@ -1,3 +1,4 @@
+import { createFileRoute } from "@tanstack/react-router";
 import type { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -12,7 +13,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { useNavigate } from "react-router-dom";
 import { MapaHora } from "@/types/mapaHoras";
 import { saveMapaHoraApi } from "@/services/MapaHoras";
 import { cn } from "@/lib/utils";
@@ -23,7 +23,9 @@ import {
 } from "@radix-ui/react-popover";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
-export default function AdicionarMapa() {
+import { useNavigate } from "@tanstack/react-router";
+
+function AdicionarMapa() {
 	return (
 		<div className="flex  flex-col justify-center items-center w-full">
 			<MapaForm />
@@ -41,7 +43,7 @@ function MapaForm() {
 	async function onSubmit(values: z.infer<typeof MapaHora>) {
 		try {
 			await saveMapaHoraApi({ ...values });
-			navigate("/ops/mapahoras", { replace: true });
+			navigate({ to: "/ops/mapahoras", replace: true });
 		} catch (e) {
 			toast({
 				variant: "destructive",
@@ -74,7 +76,7 @@ function MapaForm() {
 						<FormItem>
 							<FormLabel>Observação</FormLabel>
 							<FormControl>
-								<Input placeholder="FMP" {...field} value={""}/>
+								<Input placeholder="FMP" {...field} value={""} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -129,3 +131,7 @@ function MapaForm() {
 		</Form>
 	);
 }
+
+export const Route = createFileRoute("/ops/mapahoras/adicionar")({
+	component: () => <AdicionarMapa />,
+});

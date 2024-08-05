@@ -105,7 +105,7 @@ function SAA(props: ISaaProps) {
 
 	const handleCheckboxChange = (id: string, num: string) => {
 		setSeleted(id);
-		setNumero(numero);
+		setNumero(num);
 	};
 	return (
 		<>
@@ -130,15 +130,9 @@ function generateColumns(
 ) {
 	const columns: ColumnDef<NumerosOps>[] = [
 		{
-			accessorKey: "Numero",
+			accessorKey: "numero",
 			header: ({ column }) => {
 				return <DataTableColumnHeader title="Numero" column={column} />;
-			},
-		},
-		{
-			accessorKey: "quantidade",
-			header: ({ column }) => {
-				return <DataTableColumnHeader title="Quantidade" column={column} />;
 			},
 		},
 		{

@@ -1,21 +1,5 @@
-import { useRouteError } from "react-router-dom";
+import { createFileRoute } from "@tanstack/react-router";
 
-type routeError = {
-	message: string;
-	statusText: string;
-};
-
-export default function PaginaErro() {
-	const error = useRouteError() as routeError;
-	console.error(error);
-
-	return (
-		<div id="error-page">
-			<h1>Oops!</h1>
-			<p>Desculpas, um erro inesperado aconteceu.</p>
-			<p>
-				<i>{error.statusText || error.message}</i>
-			</p>
-		</div>
-	);
-}
+export const Route = createFileRoute("/PaginaErro")({
+	component: () => <div>Hello /PaginaErro!</div>,
+});

@@ -1,3 +1,4 @@
+import { createFileRoute } from "@tanstack/react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -11,11 +12,11 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { saveRole } from "@/services/roles";
+import { addRoleToUser } from "@/services/roles";
 import { useToast } from "@/components/ui/use-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 
-export default function AdicionarRole() {
+function AdicionarRoleParaAlguem() {
 	return (
 		<div className="flex  flex-col justify-center items-center w-full">
 			<RoleForm />
@@ -24,9 +25,10 @@ export default function AdicionarRole() {
 }
 
 const formSchema = z.object({
-	nome: z.string().min(2, {
+	role: z.string().min(2, {
 		message: "O Cargo tem que ter pelo menos 2 characteres.",
 	}),
+	email: z.string().email("Tem que ser um email"),
 });
 
 function RoleForm() {
@@ -34,15 +36,12 @@ function RoleForm() {
 	const { toast } = useToast();
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
-		defaultValues: {
-			nome: "",
-		},
 	});
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		try {
-			await saveRole({ ...values });
-			navigate("/roles", { replace: true });
+			await addRoleToUser(values);
+			navigate({ to: "/roles", replace: true });
 		} catch (e) {
 			const b = e as Error;
 			toast({
@@ -59,10 +58,23 @@ function RoleForm() {
 			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-2/3">
 				<FormField
 					control={form.control}
-					name="nome"
+					name="role"
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Nome do Cargo</FormLabel>
+							<FormControl>
+								<Input placeholder="Programador" {...field} />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name="email"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Email</FormLabel>
 							<FormControl>
 								<Input placeholder="Programador" {...field} />
 							</FormControl>
@@ -75,3 +87,7 @@ function RoleForm() {
 		</Form>
 	);
 }
+
+export const Route = createFileRoute("/roles/user/adicionar")({
+	component: () => <AdicionarRoleParaAlguem />,
+});

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 import {
 	NavigationMenu,
 	NavigationMenuItem,
@@ -12,14 +12,14 @@ export default function LoginTopbar() {
 		<NavigationMenu>
 			<NavigationMenuList>
 				<NavigationMenuItem>
-					<Link to="/login">
+					<Link to="/auth/login">
 						<NavigationMenuLink className={navigationMenuTriggerStyle()}>
 							Logar
 						</NavigationMenuLink>
 					</Link>
 				</NavigationMenuItem>
 				<NavigationMenuItem>
-					<Link to="/register">
+					<Link to="/auth/register">
 						<NavigationMenuLink className={navigationMenuTriggerStyle()}>
 							Registrar
 						</NavigationMenuLink>

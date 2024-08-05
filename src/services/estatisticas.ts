@@ -1,8 +1,8 @@
 import type { GanhoOpResult, IGanhoOp } from "@/types/estatisticas";
 import { createBasicAuthHeader } from "./identity";
 
-const baseUrl = "http://192.168.2.223:5000/api/estatisticas/ganhosop";
-// const baseUrl = "http://localhost:5000/api/estatisticas/ganhosop";
+// const baseUrl = "http://192.168.2.223:5000/api/estatisticas/ganhosop";
+const baseUrl = "http://localhost:5000/api/estatisticas/ganhosop";
 
 export async function getGanhosOp(): Promise<IGanhoOp[]> {
 	try {
@@ -65,20 +65,11 @@ export async function getGanhosOpGroupByData(data: Date): Promise<IGanhoOp[]> {
 		throw new Error(`Erro ao pegar os ganhos, erro: ${e}`);
 	}
 }
-export async function faturarOp(
-	dados: {
-		id: string;
-		quantidadeFaturada: number;
-	}[],
-) {
-	const result = new Map<string, number>();
-	for (const item of dados) {
-		result.set(item.id, item.quantidadeFaturada);
-	}
-	const body = JSON.stringify(dados);
+export async function faturarOp(dados: Map<string, number>) {
+	const body = JSON.stringify(Object.fromEntries(dados));
 	const headers = await createBasicAuthHeader();
 	headers.append("Content-Type", "application/json");
-	const response = await fetch(baseUrl, {
+	const response = await fetch(`${baseUrl}/faturar`, {
 		method: "POST",
 		headers,
 		body: body,

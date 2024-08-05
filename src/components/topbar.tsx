@@ -31,13 +31,18 @@ const ops: { title: string; href: string; description: string }[] = [
 	},
 	{
 		title: "Adicionar Item",
-		href: "/ops/item/adicionar",
+		href: "/ops/itens/adicionar",
 		description: "Adicionar Item em uma OP.",
 	},
 	{
 		title: "Pdf",
 		href: "/ops/pdf",
 		description: "Ache o pdf de uma op ou plano de corte",
+	},
+	{
+		title: "Faturar Op",
+		href: "/ops/faturar",
+		description: "Fature totalmente ou parcialmente uma Opp.",
 	},
 ];
 
@@ -96,7 +101,7 @@ export function Topbar() {
 					</NavigationMenuContent>
 				</NavigationMenuItem>
 				<NavigationMenuItem>
-					<a href="/logout">
+					<a href="/auth/logout">
 						<NavigationMenuLink className={navigationMenuTriggerStyle()}>
 							Sair
 						</NavigationMenuLink>

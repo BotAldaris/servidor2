@@ -1,24 +1,17 @@
+import { createFileRoute } from "@tanstack/react-router";
 import { DataTable } from "@/components/roles/dataTable";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { deleteRole, getRoles } from "@/services/roles";
 import type Roles from "@/types/Roles";
-import {
-	type QueryClient,
-	queryOptions,
-	useSuspenseQuery,
-} from "@tanstack/react-query";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import type { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, Trash2Icon } from "lucide-react";
 
 const roleListQuery = () =>
 	queryOptions({ queryKey: ["roles"], queryFn: () => getRoles() });
 
-export const loader = (queryClient: QueryClient) => async () => {
-	return await queryClient.ensureQueryData(roleListQuery());
-};
-
-export default function RolesIndex() {
+function RolesIndex() {
 	const { data, refetch } = useSuspenseQuery(roleListQuery());
 	const { toast } = useToast();
 	async function deletar(id: string) {
@@ -79,3 +72,10 @@ export default function RolesIndex() {
 		</div>
 	);
 }
+
+export const Route = createFileRoute("/roles/")({
+	loader: ({ context: { queryClient } }) => {
+		queryClient.ensureQueryData(roleListQuery());
+	},
+	component: () => <RolesIndex />,
+});

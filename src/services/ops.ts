@@ -11,8 +11,8 @@ import type {
 import { createBasicAuthHeader } from "./identity";
 import type { IItemOp } from "@/types/itensOp";
 
-const baseUrl = "http://192.168.2.223:5000/api/ops";
-// const baseUrl = "http://localhost:5000/api/ops";
+// const baseUrl = "http://192.168.2.223:5000/api/ops";
+const baseUrl = "http://localhost:5000/api/ops";
 
 export async function getOps(): Promise<Op[]> {
 	try {
@@ -159,14 +159,16 @@ export async function getItensOpsByIdFilterByRole(
 	}
 }
 export async function getItensOpsByOpId(id: string): Promise<IItemOp[]> {
+	console.log(id);
 	try {
 		const headers = await createBasicAuthHeader();
-		const url = `${baseUrl}/${id}/itens`;
+		const url = `${baseUrl}/${id}/itens?filtrarPorCargo=${false}`;
 		const response = await fetch(url, { headers });
 		if (!response.ok) {
 			throw new Error(`erro status: ${response.status}`);
 		}
 		const op = (await response.json()) as IItemOp[];
+		console.log(op);
 		return op;
 	} catch (e) {
 		console.log(e);

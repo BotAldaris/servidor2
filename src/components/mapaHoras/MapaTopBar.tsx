@@ -9,9 +9,9 @@ import {
 	intervalToDuration,
 	subDays,
 } from "date-fns";
-import { useNavigate } from "react-router-dom";
 import TempoTotalCard from "./TempoTotalCard";
 import type IMapaHora from "@/types/mapaHoras";
+import { useNavigate } from "@tanstack/react-router";
 
 interface IProps {
 	date: Date | undefined;
@@ -59,7 +59,7 @@ export default function MapaTopBar(props: IProps) {
 					variant="outline"
 					size="icon"
 					onClick={() =>
-						navigate("/ops/mapahoras/adicionar", { replace: false })
+						navigate({ to: "/ops/mapahoras/adicionar", replace: false })
 					}
 				>
 					<Plus className="h-4 w-4" />
