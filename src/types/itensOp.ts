@@ -47,3 +47,30 @@ export interface PostItemOPRequest {
 	programado: boolean;
 	op: string;
 }
+
+export interface ItemProgramacaoApi {
+	id: string;
+	codigo: string;
+	op: string;
+	quantidade: number;
+	espessura: number;
+	material: string;
+	dobra: boolean;
+	caldeiraria: boolean;
+	tipo: string;
+	cliente: string;
+	dataEntrega: string;
+}
+export interface IItemProgramacao {
+	id: string;
+	codigo: string;
+	op: string;
+	quantidade: number;
+	espessura: number;
+	material: string;
+	dobra: boolean;
+	caldeiraria: boolean;
+	tipo: string;
+	cliente: string;
+	dataEntrega: Date;
+}

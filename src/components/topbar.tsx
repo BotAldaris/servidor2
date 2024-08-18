@@ -13,7 +13,13 @@ import {
 	navigationMenuTriggerStyle,
 } from "./ui/navigation-menu";
 
-const ops: { title: string; href: string; description: string }[] = [
+interface ITopBarDados {
+	title: string;
+	href: string;
+	description: string;
+}
+
+const ops: ITopBarDados[] = [
 	{
 		title: "Mapa Horas",
 		href: "/ops/mapahoras",
@@ -46,7 +52,7 @@ const ops: { title: string; href: string; description: string }[] = [
 	},
 ];
 
-const components: { title: string; href: string; description: string }[] = [
+const components: ITopBarDados[] = [
 	{
 		title: "Cargos",
 		href: "/roles",
@@ -63,7 +69,13 @@ const components: { title: string; href: string; description: string }[] = [
 		description: "Adicione um novo cargo em um usuário",
 	},
 ];
-
+const programacao: ITopBarDados[] = [
+	{
+		title: "Programar",
+		href: "/programacao",
+		description: "Programe os itens das ops.",
+	},
+];
 export function Topbar() {
 	return (
 		<NavigationMenu>
@@ -89,6 +101,38 @@ export function Topbar() {
 					<NavigationMenuContent>
 						<ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
 							{components.map((component) => (
+								<ListItem
+									key={component.title}
+									title={component.title}
+									href={component.href}
+								>
+									{component.description}
+								</ListItem>
+							))}
+						</ul>
+					</NavigationMenuContent>
+				</NavigationMenuItem>
+				<NavigationMenuItem>
+					<NavigationMenuTrigger>Cargos</NavigationMenuTrigger>
+					<NavigationMenuContent>
+						<ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+							{components.map((component) => (
+								<ListItem
+									key={component.title}
+									title={component.title}
+									href={component.href}
+								>
+									{component.description}
+								</ListItem>
+							))}
+						</ul>
+					</NavigationMenuContent>
+				</NavigationMenuItem>
+				<NavigationMenuItem>
+					<NavigationMenuTrigger>Programar</NavigationMenuTrigger>
+					<NavigationMenuContent>
+						<ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+							{programacao.map((component) => (
 								<ListItem
 									key={component.title}
 									title={component.title}

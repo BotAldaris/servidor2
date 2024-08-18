@@ -16,6 +16,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as ProtectedRouteImport } from './routes/ProtectedRoute'
 import { Route as PaginaErroImport } from './routes/PaginaErro'
 import { Route as RolesIndexImport } from './routes/roles/index'
+import { Route as ProgramacaoIndexImport } from './routes/programacao/index'
 import { Route as OpsIndexImport } from './routes/ops/index'
 import { Route as RolesAdicionarImport } from './routes/roles/adicionar'
 import { Route as OpsResumoImport } from './routes/ops/resumo'
@@ -55,6 +56,11 @@ const IndexLazyRoute = IndexLazyImport.update({
 
 const RolesIndexRoute = RolesIndexImport.update({
   path: '/roles/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ProgramacaoIndexRoute = ProgramacaoIndexImport.update({
+  path: '/programacao/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -235,6 +241,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OpsIndexImport
       parentRoute: typeof rootRoute
     }
+    '/programacao/': {
+      id: '/programacao/'
+      path: '/programacao'
+      fullPath: '/programacao'
+      preLoaderRoute: typeof ProgramacaoIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/roles/': {
       id: '/roles/'
       path: '/roles'
@@ -290,6 +303,7 @@ export const routeTree = rootRoute.addChildren({
   OpsResumoRoute,
   RolesAdicionarRoute,
   OpsIndexRoute,
+  ProgramacaoIndexRoute,
   RolesIndexRoute,
   OpsItensAdicionarRoute,
   OpsMapahorasAdicionarRoute,
@@ -319,6 +333,7 @@ export const routeTree = rootRoute.addChildren({
         "/ops/resumo",
         "/roles/adicionar",
         "/ops/",
+        "/programacao/",
         "/roles/",
         "/ops/itens/adicionar",
         "/ops/mapahoras/adicionar",
@@ -367,6 +382,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/ops/": {
       "filePath": "ops/index.tsx"
+    },
+    "/programacao/": {
+      "filePath": "programacao/index.tsx"
     },
     "/roles/": {
       "filePath": "roles/index.tsx"

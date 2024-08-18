@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import Loading from "@/components/Loading";
-import MapaGanttChart from "@/components/mapaHoras/MapaGanttChart";
-import MapaTable from "@/components/mapaHoras/MapaTabela";
-import MapaTopBar from "@/components/mapaHoras/MapaTopBar";
+import MapaGanttChart from "@/components/mapahoras/MapaGanttChart";
+import MapaTable from "@/components/mapahoras/MapaTabela";
+import MapaTopBar from "@/components/mapahoras/MapaTopBar";
 import { getMapaHorasByData } from "@/services/MapaHoras";
 import type IMapaHora from "@/types/mapaHoras";
 import { queryOptions, useQuery } from "@tanstack/react-query";

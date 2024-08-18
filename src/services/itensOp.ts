@@ -1,6 +1,12 @@
-import type { IItemOp, PostItemOPRequest } from "@/types/itensOp";
+import type {
+	IItemOp,
+	IItemProgramacao,
+	ItemProgramacaoApi,
+	PostItemOPRequest,
+} from "@/types/itensOp";
 import { createBasicAuthHeader } from "./identity";
 import type { StatusItemOp } from "@/types/op";
+import type { ITableFaceted } from "@/types/tableFaceted";
 
 // const baseUrl = "http://192.168.2.223:5000/api/itensOp/";
 const baseUrl = "http://localhost:5000/api/itensOp";
@@ -9,7 +15,6 @@ export async function getItensOp(): Promise<IItemOp[]> {
 	try {
 		const headers = await createBasicAuthHeader();
 		const response = await fetch(baseUrl, { headers });
-		console.log(response);
 		if (!response.ok) {
 			throw new Error(`erro status: ${response.status}`);
 		}
@@ -20,7 +25,22 @@ export async function getItensOp(): Promise<IItemOp[]> {
 		throw new Error(`Erro ao pegar os ops, erro: ${e}`);
 	}
 }
-
+export async function getItensProgramar(): Promise<IItemProgramacao[]> {
+	try {
+		const headers = await createBasicAuthHeader();
+		const url = `${baseUrl}/programar`;
+		const response = await fetch(url, { headers });
+		if (!response.ok) {
+			throw new Error(`erro status: ${response.status}`);
+		}
+		const itensOpApi = (await response.json()) as ItemProgramacaoApi[];
+		console.log(itensOpApi);
+		return converterApiparaResult(itensOpApi);
+	} catch (e) {
+		console.log(e);
+		throw new Error(`Erro ao pegar os ops, erro: ${e}`);
+	}
+}
 export async function getItensOpsById(id: string): Promise<IItemOp> {
 	try {
 		const headers = await createBasicAuthHeader();
@@ -95,4 +115,74 @@ export async function deleteItemOpApi(id: string) {
 		alert(response.status);
 		throw new Error(`Erro ao deletar o item, Status: ${response.status}`);
 	}
+}
+export async function getUniquesEspessuras(): Promise<ITableFaceted<number>[]> {
+	try {
+		const headers = await createBasicAuthHeader();
+		const url = `${baseUrl}/unique/espessuras`;
+		const response = await fetch(url, { headers });
+		if (!response.ok) {
+			throw new Error(`erro status: ${response.status}`);
+		}
+		const espessurras = (await response.json()) as number[];
+		const result = [] as ITableFaceted<number>[];
+		for (const espessura of espessurras) {
+			result.push({ label: espessura.toString(), value: espessura });
+		}
+		return result;
+	} catch (e) {
+		console.log(e);
+		throw new Error(`Erro ao pegar as espessuras, erro: ${e}`);
+	}
+}
+export async function getUniquesMateriais(): Promise<ITableFaceted<string>[]> {
+	try {
+		const headers = await createBasicAuthHeader();
+		const url = `${baseUrl}/unique/materiais`;
+		const response = await fetch(url, { headers });
+		if (!response.ok) {
+			throw new Error(`erro status: ${response.status}`);
+		}
+		const materiais = (await response.json()) as string[];
+		const result = [] as ITableFaceted<string>[];
+		for (const material of materiais) {
+			result.push({ label: material, value: material });
+		}
+		return result;
+	} catch (e) {
+		console.log(e);
+		throw new Error(`Erro ao pegar os materiais, erro: ${e}`);
+	}
+}
+export async function getUniquesClientes(): Promise<ITableFaceted<string>[]> {
+	try {
+		const headers = await createBasicAuthHeader();
+		const url = `${baseUrl}/unique/clientes`;
+		const response = await fetch(url, { headers });
+		if (!response.ok) {
+			throw new Error(`erro status: ${response.status}`);
+		}
+		const clientes = (await response.json()) as string[];
+		const result = [] as ITableFaceted<string>[];
+		for (const cliente of clientes) {
+			result.push({ label: cliente, value: cliente });
+		}
+		return result;
+	} catch (e) {
+		console.log(e);
+		throw new Error(`Erro ao pegar os clientes, erro: ${e}`);
+	}
+}
+function converterApiparaResult(
+	itensApi: ItemProgramacaoApi[],
+): IItemProgramacao[] {
+	const result = [] as IItemProgramacao[];
+	for (const item of itensApi) {
+		const novoOp = {
+			...item,
+			dataEntrega: new Date(item.dataEntrega),
+		} as IItemProgramacao;
+		result.push(novoOp);
+	}
+	return result;
 }
