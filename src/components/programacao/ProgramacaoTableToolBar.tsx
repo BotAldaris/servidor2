@@ -14,8 +14,8 @@ interface DataTableToolbarProps<TData> {
 	espessuras: ITableFaceted<number>[];
 }
 const tipo = [
-	{ label: "BENEF", value: "BENEF" },
-	{ label: "VENDA", value: "VENDA" },
+	{ label: "BENEF", value: "Beneficiamento" },
+	{ label: "VENDA", value: "Venda" },
 ] as ITableFaceted<string>[];
 
 export function DataTableToolbar<TData>({

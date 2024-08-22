@@ -8,8 +8,8 @@ import { createBasicAuthHeader } from "./identity";
 import type { StatusItemOp } from "@/types/op";
 import type { ITableFaceted } from "@/types/tableFaceted";
 
-// const baseUrl = "http://192.168.2.223:5000/api/itensOp/";
-const baseUrl = "http://localhost:5000/api/itensOp";
+const baseUrl = "http://192.168.2.223:5000/api/itensOp";
+// const baseUrl = "http://localhost:5000/api/itensOp";
 
 export async function getItensOp(): Promise<IItemOp[]> {
 	try {
@@ -173,6 +173,23 @@ export async function getUniquesClientes(): Promise<ITableFaceted<string>[]> {
 		throw new Error(`Erro ao pegar os clientes, erro: ${e}`);
 	}
 }
+
+export async function programarApi(itens:string[]) {
+	const headers = await createBasicAuthHeader();
+	const url = `${baseUrl}/programar`;
+	headers.append("Content-Type", "application/json");
+	const ids ={ids:itens}
+	const body = JSON.stringify(ids);
+	const response = await fetch(url, {
+		method: "POST",
+		headers,
+		body: body,
+	});
+	if (!response.ok) {
+		throw new Error(`Erro ao adicionar o item, Status: ${response.status}`);
+	}
+}
+
 function converterApiparaResult(
 	itensApi: ItemProgramacaoApi[],
 ): IItemProgramacao[] {

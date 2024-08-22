@@ -26,6 +26,9 @@ import {
 import DataTablePagination from "../DataTablePagination";
 import { DataTableToolbar } from "./ProgramacaoTableToolBar";
 import type { ITableFaceted } from "@/types/tableFaceted";
+import { Button } from "../ui/button";
+import { object } from "zod";
+import { programarApi } from "@/services/itensOp";
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
@@ -70,8 +73,15 @@ export function ProgramacaoDataTable<TData, TValue>({
 		getSortedRowModel: getSortedRowModel(),
 		getFacetedRowModel: getFacetedRowModel(),
 		getFacetedUniqueValues: getFacetedUniqueValues(),
+		getRowId: row => row.id
 	});
-
+	function programarItens(){
+		const itens = []
+		for (const item of Object.keys(rowSelection)) {
+			itens.push(item)	
+		}
+		programarApi(itens)
+	}
 	return (
 		<div className="space-y-4">
 			<DataTableToolbar
@@ -131,6 +141,7 @@ export function ProgramacaoDataTable<TData, TValue>({
 				</Table>
 			</div>
 			<DataTablePagination table={table} />
+			<Button onClick={() => programarItens()}>Programar</Button>
 		</div>
 	);
 }
