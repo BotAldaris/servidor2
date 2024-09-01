@@ -5,8 +5,9 @@ import {
 	getUniquesClientes,
 	getUniquesEspessuras,
 	getUniquesMateriais,
+	getUniquesOps,
 } from "@/services/itensOp";
-import type { IItemProgramacao } from "@/types/itensOp";
+import { Status, type IItemProgramacao } from "@/types/itensOp";
 import type { ITableFaceted } from "@/types/tableFaceted";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
@@ -16,14 +17,16 @@ async function pegarDados(): Promise<{
 	espessuras: ITableFaceted<number>[];
 	materiais: ITableFaceted<string>[];
 	clientes: ITableFaceted<string>[];
+	ops: ITableFaceted<string>[];
 }> {
-	const [dados, espessuras, materiais, clientes] = await Promise.all([
+	const [dados, espessuras, materiais, clientes, ops] = await Promise.all([
 		getItensProgramar(),
-		getUniquesEspessuras(),
-		getUniquesMateriais(),
-		getUniquesClientes(),
+		getUniquesEspessuras(Status.Programando),
+		getUniquesMateriais(Status.Programando),
+		getUniquesClientes(Status.Programando),
+		getUniquesOps(Status.Programando),
 	]);
-	return { dados, espessuras, materiais, clientes };
+	return { dados, espessuras, materiais, clientes, ops };
 }
 
 const programacaoListQuery = queryOptions({
@@ -46,6 +49,7 @@ function ProgramacaoIndex() {
 			data={result.dados}
 			columns={programacaoColumns}
 			clientes={result.clientes}
+			ops={result.ops}
 			materiais={result.materiais}
 			espessuras={result.espessuras}
 		/>

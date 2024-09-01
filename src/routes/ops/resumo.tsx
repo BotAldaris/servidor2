@@ -44,7 +44,7 @@ function ResumoOpIndex() {
 
 	return (
 		<div>
-			<ResumoOpTable columns={columns} data={data} />
+			<ResumoOpTable columns={columns} data={data} filter="numero" />
 		</div>
 	);
 }

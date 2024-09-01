@@ -6,9 +6,7 @@ export default defineConfig({
 	plugins: [pluginReact()],
 	tools: {
 		rspack: {
-			plugins: [
-				TanStackRouterRspack({ experimental: { enableCodeSplitting: true } }),
-			],
+			plugins: [TanStackRouterRspack({ autoCodeSplitting: true })],
 		},
 	},
 });

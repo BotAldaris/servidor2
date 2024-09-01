@@ -10,6 +10,7 @@ import type { ITableFaceted } from "@/types/tableFaceted";
 interface DataTableToolbarProps<TData> {
 	table: Table<TData>;
 	clientes: ITableFaceted<string>[];
+	ops: ITableFaceted<string>[];
 	materiais: ITableFaceted<string>[];
 	espessuras: ITableFaceted<number>[];
 }
@@ -21,6 +22,7 @@ const tipo = [
 export function DataTableToolbar<TData>({
 	table,
 	clientes,
+	ops,
 	materiais,
 	espessuras,
 }: DataTableToolbarProps<TData>) {
@@ -42,6 +44,13 @@ export function DataTableToolbar<TData>({
 						column={table.getColumn("cliente")}
 						title="Clientes"
 						options={clientes}
+					/>
+				)}
+				{table.getColumn("op") && (
+					<DataTableFacetedFilter
+						column={table.getColumn("op")}
+						title="Op"
+						options={ops}
 					/>
 				)}
 				{table.getColumn("material") && (

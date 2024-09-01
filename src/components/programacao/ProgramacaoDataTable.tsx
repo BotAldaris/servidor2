@@ -27,13 +27,13 @@ import DataTablePagination from "../DataTablePagination";
 import { DataTableToolbar } from "./ProgramacaoTableToolBar";
 import type { ITableFaceted } from "@/types/tableFaceted";
 import { Button } from "../ui/button";
-import { object } from "zod";
 import { programarApi } from "@/services/itensOp";
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
 	data: TData[];
 	clientes: ITableFaceted<string>[];
+	ops: ITableFaceted<string>[];
 	materiais: ITableFaceted<string>[];
 	espessuras: ITableFaceted<number>[];
 }
@@ -42,6 +42,7 @@ export function ProgramacaoDataTable<TData, TValue>({
 	columns,
 	data,
 	clientes,
+	ops,
 	materiais,
 	espessuras,
 }: DataTableProps<TData, TValue>) {
@@ -73,20 +74,21 @@ export function ProgramacaoDataTable<TData, TValue>({
 		getSortedRowModel: getSortedRowModel(),
 		getFacetedRowModel: getFacetedRowModel(),
 		getFacetedUniqueValues: getFacetedUniqueValues(),
-		getRowId: row => row.id
+		getRowId: (row) => row.id,
 	});
-	function programarItens(){
-		const itens = []
+	function programarItens() {
+		const itens = [];
 		for (const item of Object.keys(rowSelection)) {
-			itens.push(item)	
+			itens.push(item);
 		}
-		programarApi(itens)
+		programarApi(itens);
 	}
 	return (
 		<div className="space-y-4">
 			<DataTableToolbar
 				table={table}
 				clientes={clientes}
+				ops={ops}
 				materiais={materiais}
 				espessuras={espessuras}
 			/>

@@ -12,11 +12,17 @@ import {
 import TempoTotalCard from "./TempoTotalCard";
 import type IMapaHora from "@/types/mapaHoras";
 import { useNavigate } from "@tanstack/react-router";
+import MapaAdicionarOpDialog from "./MapaAdicionaOpDialog";
+import type { MapaAdicionarFormValue } from "./MapaAdicionaOpDialog";
 
 interface IProps {
 	date: Date | undefined;
 	setDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
 	dados: IMapaHora[] | undefined;
+	callback: (
+		dados: MapaAdicionarFormValue,
+		setOpen: React.Dispatch<React.SetStateAction<boolean>>,
+	) => void;
 }
 
 function mapaParaDuracao(dados: IMapaHora[], dataI: Date): Duration {
@@ -39,7 +45,12 @@ export default function MapaTopBar(props: IProps) {
 	return (
 		<div className="flex flex-row justify-around content-center	">
 			<div />
+
 			<div>
+				<MapaAdicionarOpDialog
+					date={props.date ?? new Date()}
+					callback={props.callback}
+				/>
 				<Button
 					variant="outline"
 					size="icon"

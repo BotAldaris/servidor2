@@ -1,8 +1,8 @@
 import type { GanhoOpResult, IGanhoOp } from "@/types/estatisticas";
 import { createBasicAuthHeader } from "./identity";
 
-const baseUrl = "http://192.168.2.223:5000/api/estatisticas/ganhosop";
-// const baseUrl = "http://localhost:5000/api/estatisticas/ganhosop";
+// const baseUrl = "http://192.168.2.223:5000/api/estatisticas/ganhosop";
+const baseUrl = "http://localhost:5000/api/estatisticas/ganhosop";
 
 export async function getGanhosOp(): Promise<IGanhoOp[]> {
 	try {

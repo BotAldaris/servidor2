@@ -1,9 +1,15 @@
 import type IMapaHora from "@/types/mapaHoras";
-import type { GetMapaHora, PostMapaHoraRequest } from "@/types/mapaHoras";
+import type {
+	GetMapaHora,
+	GetMapaHoraSimple,
+	IMapaHoraSimple,
+	PostMapaHoraRequest,
+	PutMapaHoraRequest,
+} from "@/types/mapaHoras";
 import { createBasicAuthHeader } from "./identity";
 
-const baseUrl = "http://192.168.2.223:5000/api/mapaHoras";
-// const baseUrl = "http://localhost:5000/api/mapaHoras";
+// const baseUrl = "http://192.168.2.223:5000/api/mapaHoras";
+const baseUrl = "http://localhost:5000/api/mapaHoras";
 
 export async function getMapaHoras(): Promise<IMapaHora[]> {
 	try {
@@ -21,7 +27,7 @@ export async function getMapaHoras(): Promise<IMapaHora[]> {
 	}
 }
 
-export async function getMapaHoraById(id: string): Promise<IMapaHora> {
+export async function getMapaHoraById(id: string): Promise<IMapaHoraSimple> {
 	try {
 		const header = await createBasicAuthHeader();
 		const url = `${baseUrl}/${id}`;
@@ -29,8 +35,8 @@ export async function getMapaHoraById(id: string): Promise<IMapaHora> {
 		if (!response.ok) {
 			throw new Error(`erro status: ${response.status}`);
 		}
-		const mapa = (await response.json()) as IMapaHora;
-		return mapa;
+		const mapa = (await response.json()) as GetMapaHoraSimple;
+		return { ...mapa, data: new Date(mapa.data) };
 	} catch (e) {
 		console.log(e);
 		throw new Error(`Erro ao pegar o mapa, erro: ${e}`);
@@ -70,13 +76,13 @@ export async function saveMapaHoraApi(mapa: PostMapaHoraRequest) {
 	}
 }
 
-export async function putOpMapaApi(mapa: PostMapaHoraRequest, id: string) {
+export async function putOpMapaApi(mapa: PutMapaHoraRequest, id: string) {
 	const headers = await createBasicAuthHeader();
 	headers.append("Content-Type", "application/json");
 	const base = `${baseUrl}/${id}`;
 	const body = JSON.stringify({
 		...mapa,
-		data: mapa.data.toISOString().split("T")[0],
+		data: mapa.data != null ? mapa.data.toISOString().split("T")[0] : null,
 	});
 	const response = await fetch(base, {
 		method: "PUT",

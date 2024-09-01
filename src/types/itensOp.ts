@@ -74,3 +74,14 @@ export interface IItemProgramacao {
 	cliente: string;
 	dataEntrega: Date;
 }
+
+export enum Status {
+	Programando = 0,
+	SeparandoMaterial = 1,
+	Cortando = 2,
+	Dobrando = 3,
+	Usinando = 4,
+	Caldeiradando = 5,
+	Faturando = 6,
+	Concluido = 7,
+}

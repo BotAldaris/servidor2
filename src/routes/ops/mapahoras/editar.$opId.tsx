@@ -13,8 +13,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { MapaHora } from "@/types/mapaHoras";
-import { saveMapaHoraApi } from "@/services/MapaHoras";
+import { type IMapaHoraSimple, MapaHora } from "@/types/mapaHoras";
+import { getMapaHoraById, saveMapaHoraApi } from "@/services/MapaHoras";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
@@ -24,24 +24,36 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from "@/components/ui/popover";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+
+const editarMapaHoraQuery = (num: string) =>
+	queryOptions({
+		queryKey: ["mapaHora", num],
+		queryFn: () => getMapaHoraById(num),
+	});
 
 function AdicionarMapa() {
+	const { opId } = Route.useParams();
+	const postsQuery = useSuspenseQuery(editarMapaHoraQuery(opId));
+	const result = postsQuery.data;
 	return (
 		<div className="flex  flex-col justify-center items-center w-full">
-			<MapaForm />
+			<MapaForm dados={result} />
 		</div>
 	);
 }
-
-function MapaForm() {
+interface IMapaFormProps {
+	dados: IMapaHoraSimple;
+}
+function MapaForm({ dados }: IMapaFormProps) {
 	const navigate = useNavigate();
 	const { toast } = useToast();
 	const form = useForm<z.infer<typeof MapaHora>>({
 		resolver: zodResolver(MapaHora),
 		defaultValues: {
-			observacao: "",
-			data: new Date(),
-			opId: "",
+			observacao: dados.observacao,
+			opId: dados.opId,
+			data: dados.data,
 		},
 	});
 	// 2. Define a submit handler.
@@ -131,12 +143,14 @@ function MapaForm() {
 						</FormItem>
 					)}
 				/>
-				<Button type="submit">Enviar</Button>
+				<Button type="submit">Editar</Button>
 			</form>
 		</Form>
 	);
 }
-
-export const Route = createFileRoute("/ops/mapahoras/adicionar")({
+export const Route = createFileRoute("/ops/mapahoras/editar/$opId")({
+	loader: ({ context: { queryClient }, params }) => {
+		queryClient.ensureQueryData(editarMapaHoraQuery(params.opId));
+	},
 	component: () => <AdicionarMapa />,
 });

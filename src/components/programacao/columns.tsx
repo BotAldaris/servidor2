@@ -4,7 +4,6 @@ import { DataTableColumnHeader } from "../DataTableColumnHeader";
 import type { IItemProgramacao } from "@/types/itensOp";
 import { XIcon } from "lucide-react";
 import { format } from "date-fns";
-import { ro } from "date-fns/locale";
 
 export const programacaoColumns: ColumnDef<IItemProgramacao>[] = [
 	{
@@ -42,6 +41,9 @@ export const programacaoColumns: ColumnDef<IItemProgramacao>[] = [
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title="OP" />
 		),
+		filterFn: (row, id, value) => {
+			return value.includes(row.getValue(id));
+		},
 	},
 	{
 		accessorKey: "cliente",

@@ -32,6 +32,7 @@ import { Route as OpsMapahorasIndexImport } from './routes/ops/mapahoras/index'
 import { Route as RolesUserAdicionarImport } from './routes/roles/user/adicionar'
 import { Route as OpsMapahorasAdicionarImport } from './routes/ops/mapahoras/adicionar'
 import { Route as OpsItensAdicionarImport } from './routes/ops/itens/adicionar'
+import { Route as OpsMapahorasEditarOpIdImport } from './routes/ops/mapahoras/editar.$opId'
 
 // Create Virtual Routes
 
@@ -136,6 +137,11 @@ const OpsMapahorasAdicionarRoute = OpsMapahorasAdicionarImport.update({
 
 const OpsItensAdicionarRoute = OpsItensAdicionarImport.update({
   path: '/ops/itens/adicionar',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const OpsMapahorasEditarOpIdRoute = OpsMapahorasEditarOpIdImport.update({
+  path: '/ops/mapahoras/editar/$opId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -283,6 +289,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OpsMapahorasIndexImport
       parentRoute: typeof rootRoute
     }
+    '/ops/mapahoras/editar/$opId': {
+      id: '/ops/mapahoras/editar/$opId'
+      path: '/ops/mapahoras/editar/$opId'
+      fullPath: '/ops/mapahoras/editar/$opId'
+      preLoaderRoute: typeof OpsMapahorasEditarOpIdImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -309,6 +322,7 @@ export const routeTree = rootRoute.addChildren({
   OpsMapahorasAdicionarRoute,
   RolesUserAdicionarRoute,
   OpsMapahorasIndexRoute,
+  OpsMapahorasEditarOpIdRoute,
 })
 
 /* prettier-ignore-end */
@@ -338,7 +352,8 @@ export const routeTree = rootRoute.addChildren({
         "/ops/itens/adicionar",
         "/ops/mapahoras/adicionar",
         "/roles/user/adicionar",
-        "/ops/mapahoras/"
+        "/ops/mapahoras/",
+        "/ops/mapahoras/editar/$opId"
       ]
     },
     "/": {
@@ -400,6 +415,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/ops/mapahoras/": {
       "filePath": "ops/mapahoras/index.tsx"
+    },
+    "/ops/mapahoras/editar/$opId": {
+      "filePath": "ops/mapahoras/editar.$opId.tsx"
     }
   }
 }
