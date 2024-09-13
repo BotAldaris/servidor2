@@ -17,6 +17,7 @@ import { Route as ProtectedRouteImport } from './routes/ProtectedRoute'
 import { Route as PaginaErroImport } from './routes/PaginaErro'
 import { Route as RolesIndexImport } from './routes/roles/index'
 import { Route as ProgramacaoIndexImport } from './routes/programacao/index'
+import { Route as OrcamentoIndexImport } from './routes/orcamento/index'
 import { Route as OpsIndexImport } from './routes/ops/index'
 import { Route as RolesAdicionarImport } from './routes/roles/adicionar'
 import { Route as OpsResumoImport } from './routes/ops/resumo'
@@ -62,6 +63,11 @@ const RolesIndexRoute = RolesIndexImport.update({
 
 const ProgramacaoIndexRoute = ProgramacaoIndexImport.update({
   path: '/programacao/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const OrcamentoIndexRoute = OrcamentoIndexImport.update({
+  path: '/orcamento/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -247,6 +253,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OpsIndexImport
       parentRoute: typeof rootRoute
     }
+    '/orcamento/': {
+      id: '/orcamento/'
+      path: '/orcamento'
+      fullPath: '/orcamento'
+      preLoaderRoute: typeof OrcamentoIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/programacao/': {
       id: '/programacao/'
       path: '/programacao'
@@ -301,29 +314,211 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({
-  IndexLazyRoute,
-  PaginaErroRoute,
-  ProtectedRouteRoute,
-  AuthLoginRoute,
-  AuthLogoutRoute,
-  AuthRegisterRoute,
-  EstatisticasGanhoOpResumoRoute,
-  OpsAdicionarRoute,
-  OpsEditarRoute,
-  OpsFaturarRoute,
-  OpsPdfRoute,
-  OpsResumoRoute,
-  RolesAdicionarRoute,
-  OpsIndexRoute,
-  ProgramacaoIndexRoute,
-  RolesIndexRoute,
-  OpsItensAdicionarRoute,
-  OpsMapahorasAdicionarRoute,
-  RolesUserAdicionarRoute,
-  OpsMapahorasIndexRoute,
-  OpsMapahorasEditarOpIdRoute,
-})
+export interface FileRoutesByFullPath {
+  '/': typeof IndexLazyRoute
+  '/PaginaErro': typeof PaginaErroRoute
+  '/ProtectedRoute': typeof ProtectedRouteRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/logout': typeof AuthLogoutRoute
+  '/auth/register': typeof AuthRegisterRoute
+  '/estatisticas/GanhoOpResumo': typeof EstatisticasGanhoOpResumoRoute
+  '/ops/adicionar': typeof OpsAdicionarRoute
+  '/ops/editar': typeof OpsEditarRoute
+  '/ops/faturar': typeof OpsFaturarRoute
+  '/ops/pdf': typeof OpsPdfRoute
+  '/ops/resumo': typeof OpsResumoRoute
+  '/roles/adicionar': typeof RolesAdicionarRoute
+  '/ops': typeof OpsIndexRoute
+  '/orcamento': typeof OrcamentoIndexRoute
+  '/programacao': typeof ProgramacaoIndexRoute
+  '/roles': typeof RolesIndexRoute
+  '/ops/itens/adicionar': typeof OpsItensAdicionarRoute
+  '/ops/mapahoras/adicionar': typeof OpsMapahorasAdicionarRoute
+  '/roles/user/adicionar': typeof RolesUserAdicionarRoute
+  '/ops/mapahoras': typeof OpsMapahorasIndexRoute
+  '/ops/mapahoras/editar/$opId': typeof OpsMapahorasEditarOpIdRoute
+}
+
+export interface FileRoutesByTo {
+  '/': typeof IndexLazyRoute
+  '/PaginaErro': typeof PaginaErroRoute
+  '/ProtectedRoute': typeof ProtectedRouteRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/logout': typeof AuthLogoutRoute
+  '/auth/register': typeof AuthRegisterRoute
+  '/estatisticas/GanhoOpResumo': typeof EstatisticasGanhoOpResumoRoute
+  '/ops/adicionar': typeof OpsAdicionarRoute
+  '/ops/editar': typeof OpsEditarRoute
+  '/ops/faturar': typeof OpsFaturarRoute
+  '/ops/pdf': typeof OpsPdfRoute
+  '/ops/resumo': typeof OpsResumoRoute
+  '/roles/adicionar': typeof RolesAdicionarRoute
+  '/ops': typeof OpsIndexRoute
+  '/orcamento': typeof OrcamentoIndexRoute
+  '/programacao': typeof ProgramacaoIndexRoute
+  '/roles': typeof RolesIndexRoute
+  '/ops/itens/adicionar': typeof OpsItensAdicionarRoute
+  '/ops/mapahoras/adicionar': typeof OpsMapahorasAdicionarRoute
+  '/roles/user/adicionar': typeof RolesUserAdicionarRoute
+  '/ops/mapahoras': typeof OpsMapahorasIndexRoute
+  '/ops/mapahoras/editar/$opId': typeof OpsMapahorasEditarOpIdRoute
+}
+
+export interface FileRoutesById {
+  __root__: typeof rootRoute
+  '/': typeof IndexLazyRoute
+  '/PaginaErro': typeof PaginaErroRoute
+  '/ProtectedRoute': typeof ProtectedRouteRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/logout': typeof AuthLogoutRoute
+  '/auth/register': typeof AuthRegisterRoute
+  '/estatisticas/GanhoOpResumo': typeof EstatisticasGanhoOpResumoRoute
+  '/ops/adicionar': typeof OpsAdicionarRoute
+  '/ops/editar': typeof OpsEditarRoute
+  '/ops/faturar': typeof OpsFaturarRoute
+  '/ops/pdf': typeof OpsPdfRoute
+  '/ops/resumo': typeof OpsResumoRoute
+  '/roles/adicionar': typeof RolesAdicionarRoute
+  '/ops/': typeof OpsIndexRoute
+  '/orcamento/': typeof OrcamentoIndexRoute
+  '/programacao/': typeof ProgramacaoIndexRoute
+  '/roles/': typeof RolesIndexRoute
+  '/ops/itens/adicionar': typeof OpsItensAdicionarRoute
+  '/ops/mapahoras/adicionar': typeof OpsMapahorasAdicionarRoute
+  '/roles/user/adicionar': typeof RolesUserAdicionarRoute
+  '/ops/mapahoras/': typeof OpsMapahorasIndexRoute
+  '/ops/mapahoras/editar/$opId': typeof OpsMapahorasEditarOpIdRoute
+}
+
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/PaginaErro'
+    | '/ProtectedRoute'
+    | '/auth/login'
+    | '/auth/logout'
+    | '/auth/register'
+    | '/estatisticas/GanhoOpResumo'
+    | '/ops/adicionar'
+    | '/ops/editar'
+    | '/ops/faturar'
+    | '/ops/pdf'
+    | '/ops/resumo'
+    | '/roles/adicionar'
+    | '/ops'
+    | '/orcamento'
+    | '/programacao'
+    | '/roles'
+    | '/ops/itens/adicionar'
+    | '/ops/mapahoras/adicionar'
+    | '/roles/user/adicionar'
+    | '/ops/mapahoras'
+    | '/ops/mapahoras/editar/$opId'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/PaginaErro'
+    | '/ProtectedRoute'
+    | '/auth/login'
+    | '/auth/logout'
+    | '/auth/register'
+    | '/estatisticas/GanhoOpResumo'
+    | '/ops/adicionar'
+    | '/ops/editar'
+    | '/ops/faturar'
+    | '/ops/pdf'
+    | '/ops/resumo'
+    | '/roles/adicionar'
+    | '/ops'
+    | '/orcamento'
+    | '/programacao'
+    | '/roles'
+    | '/ops/itens/adicionar'
+    | '/ops/mapahoras/adicionar'
+    | '/roles/user/adicionar'
+    | '/ops/mapahoras'
+    | '/ops/mapahoras/editar/$opId'
+  id:
+    | '__root__'
+    | '/'
+    | '/PaginaErro'
+    | '/ProtectedRoute'
+    | '/auth/login'
+    | '/auth/logout'
+    | '/auth/register'
+    | '/estatisticas/GanhoOpResumo'
+    | '/ops/adicionar'
+    | '/ops/editar'
+    | '/ops/faturar'
+    | '/ops/pdf'
+    | '/ops/resumo'
+    | '/roles/adicionar'
+    | '/ops/'
+    | '/orcamento/'
+    | '/programacao/'
+    | '/roles/'
+    | '/ops/itens/adicionar'
+    | '/ops/mapahoras/adicionar'
+    | '/roles/user/adicionar'
+    | '/ops/mapahoras/'
+    | '/ops/mapahoras/editar/$opId'
+  fileRoutesById: FileRoutesById
+}
+
+export interface RootRouteChildren {
+  IndexLazyRoute: typeof IndexLazyRoute
+  PaginaErroRoute: typeof PaginaErroRoute
+  ProtectedRouteRoute: typeof ProtectedRouteRoute
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthLogoutRoute: typeof AuthLogoutRoute
+  AuthRegisterRoute: typeof AuthRegisterRoute
+  EstatisticasGanhoOpResumoRoute: typeof EstatisticasGanhoOpResumoRoute
+  OpsAdicionarRoute: typeof OpsAdicionarRoute
+  OpsEditarRoute: typeof OpsEditarRoute
+  OpsFaturarRoute: typeof OpsFaturarRoute
+  OpsPdfRoute: typeof OpsPdfRoute
+  OpsResumoRoute: typeof OpsResumoRoute
+  RolesAdicionarRoute: typeof RolesAdicionarRoute
+  OpsIndexRoute: typeof OpsIndexRoute
+  OrcamentoIndexRoute: typeof OrcamentoIndexRoute
+  ProgramacaoIndexRoute: typeof ProgramacaoIndexRoute
+  RolesIndexRoute: typeof RolesIndexRoute
+  OpsItensAdicionarRoute: typeof OpsItensAdicionarRoute
+  OpsMapahorasAdicionarRoute: typeof OpsMapahorasAdicionarRoute
+  RolesUserAdicionarRoute: typeof RolesUserAdicionarRoute
+  OpsMapahorasIndexRoute: typeof OpsMapahorasIndexRoute
+  OpsMapahorasEditarOpIdRoute: typeof OpsMapahorasEditarOpIdRoute
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexLazyRoute: IndexLazyRoute,
+  PaginaErroRoute: PaginaErroRoute,
+  ProtectedRouteRoute: ProtectedRouteRoute,
+  AuthLoginRoute: AuthLoginRoute,
+  AuthLogoutRoute: AuthLogoutRoute,
+  AuthRegisterRoute: AuthRegisterRoute,
+  EstatisticasGanhoOpResumoRoute: EstatisticasGanhoOpResumoRoute,
+  OpsAdicionarRoute: OpsAdicionarRoute,
+  OpsEditarRoute: OpsEditarRoute,
+  OpsFaturarRoute: OpsFaturarRoute,
+  OpsPdfRoute: OpsPdfRoute,
+  OpsResumoRoute: OpsResumoRoute,
+  RolesAdicionarRoute: RolesAdicionarRoute,
+  OpsIndexRoute: OpsIndexRoute,
+  OrcamentoIndexRoute: OrcamentoIndexRoute,
+  ProgramacaoIndexRoute: ProgramacaoIndexRoute,
+  RolesIndexRoute: RolesIndexRoute,
+  OpsItensAdicionarRoute: OpsItensAdicionarRoute,
+  OpsMapahorasAdicionarRoute: OpsMapahorasAdicionarRoute,
+  RolesUserAdicionarRoute: RolesUserAdicionarRoute,
+  OpsMapahorasIndexRoute: OpsMapahorasIndexRoute,
+  OpsMapahorasEditarOpIdRoute: OpsMapahorasEditarOpIdRoute,
+}
+
+export const routeTree = rootRoute
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
 
 /* prettier-ignore-end */
 
@@ -347,6 +542,7 @@ export const routeTree = rootRoute.addChildren({
         "/ops/resumo",
         "/roles/adicionar",
         "/ops/",
+        "/orcamento/",
         "/programacao/",
         "/roles/",
         "/ops/itens/adicionar",
@@ -397,6 +593,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/ops/": {
       "filePath": "ops/index.tsx"
+    },
+    "/orcamento/": {
+      "filePath": "orcamento/index.tsx"
     },
     "/programacao/": {
       "filePath": "programacao/index.tsx"

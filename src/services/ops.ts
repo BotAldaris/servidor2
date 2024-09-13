@@ -11,8 +11,8 @@ import type {
 import { createBasicAuthHeader } from "./identity";
 import type { IItemOp } from "@/types/itensOp";
 
-// const baseUrl = "http://192.168.2.223:5000/api/ops";
-const baseUrl = "http://localhost:5000/api/ops";
+const baseUrl = "http://192.168.2.223:5000/api/ops";
+// const baseUrl = "http://localhost:5000/api/ops";
 
 export async function getOps(): Promise<Op[]> {
 	try {
