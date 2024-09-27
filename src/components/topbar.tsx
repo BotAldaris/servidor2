@@ -51,7 +51,28 @@ const ops: ITopBarDados[] = [
 		description: "Fature totalmente ou parcialmente uma Opp.",
 	},
 ];
-
+const materiais: ITopBarDados[] = [
+	{
+		title: "Materiais",
+		href: "/materiais",
+		description: "Todos os materiais em um lugar.",
+	},
+	{
+		title: "Adicionar Material",
+		href: "/materiais/adicionar",
+		description: "Adicione um novo material",
+	},
+	{
+		title: "Ligas",
+		href: "/materiais/ligas",
+		description: "Todos as ligas em um lugar.",
+	},
+	{
+		title: "Adicionar Liga",
+		href: "/materiais/ligas/adicionar",
+		description: "Adicione uma nova liga",
+	},
+];
 const components: ITopBarDados[] = [
 	{
 		title: "Cargos",
@@ -113,16 +134,16 @@ export function Topbar() {
 					</NavigationMenuContent>
 				</NavigationMenuItem>
 				<NavigationMenuItem>
-					<NavigationMenuTrigger>Cargos</NavigationMenuTrigger>
+					<NavigationMenuTrigger>Materiais</NavigationMenuTrigger>
 					<NavigationMenuContent>
 						<ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-							{components.map((component) => (
+							{materiais.map((material) => (
 								<ListItem
-									key={component.title}
-									title={component.title}
-									href={component.href}
+									key={material.title}
+									title={material.title}
+									href={material.href}
 								>
-									{component.description}
+									{material.description}
 								</ListItem>
 							))}
 						</ul>
