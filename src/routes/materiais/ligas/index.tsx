@@ -1,15 +1,30 @@
+import type { escolhas } from "@/components/ComboBox";
 import DataTableBase from "@/components/DataTableBase";
 import { DataTableColumnHeader } from "@/components/DataTableColumnHeader";
+import { LigasTableToolbar } from "@/components/materiais/LigasTableToolBar";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { deleteLigaApi, getLigas } from "@/services/ligasService";
+import { getMaterialSeletor } from "@/services/materiais";
 import type Liga from "@/types/ligas";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Edit2Icon, DeleteIcon } from "lucide-react";
+
+async function pegarDados(): Promise<{
+	dados: Liga[];
+	materiais: escolhas[];
+}> {
+	const [dados, materiais] = await Promise.all([
+		getLigas(),
+        getMaterialSeletor(),
+	]);
+	return { dados, materiais };
+}
+
 const ligaListQuery = () =>
-	queryOptions({ queryKey: ["ligas"], queryFn: () => getLigas() });
+	queryOptions({ queryKey: ["ligas","materiaisSeletor"], queryFn: () => pegarDados() });
 
 export const Route = createFileRoute("/materiais/ligas/")({
 	loader: ({ context: { queryClient } }) => {
@@ -45,7 +60,7 @@ function LigaIndex() {
 		{
 			accessorKey: "material",
 			header: ({ column }) => (
-				<DataTableColumnHeader column={column} title="Nome" />
+				<DataTableColumnHeader column={column} title="Material" />
 			),
 			filterFn: (row, id, value) => {
 				return value.includes(row.getValue(id));
@@ -54,14 +69,7 @@ function LigaIndex() {
 		{
 			accessorKey: "densidade",
 			header: ({ column }) => (
-				<DataTableColumnHeader column={column} title="Nome" />
-			),
-		},
-
-		{
-			accessorKey: "nome",
-			header: ({ column }) => (
-				<DataTableColumnHeader column={column} title="Nome" />
+				<DataTableColumnHeader column={column} title="Densidade" />
 			),
 		},
 		{
@@ -93,10 +101,20 @@ function LigaIndex() {
 		<div>
 			<DataTableBase
 				columns={LigaColumn}
-				data={data}
+				data={data.dados}
 				filter="nome"
 				nome="Nome"
-			/>
+				Toolbar={(x) => <LigasTableToolbar table={x.table} seletor={translate(data.materiais)} />}
+				/>
 		</div>
 	);
 }
+
+function translate(x: escolhas[]){
+		const i = []
+		for (let index = 0; index < x.length; index++) {
+			const element = x[index];
+			i.push({label:element.label,value:element.label})
+		}
+		return i
+	}

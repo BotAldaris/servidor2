@@ -38,7 +38,10 @@ import { Route as OpsMapahorasAdicionarImport } from './routes/ops/mapahoras/adi
 import { Route as OpsItensAdicionarImport } from './routes/ops/itens/adicionar'
 import { Route as MateriaisLigasAdicionarImport } from './routes/materiais/ligas/adicionar'
 import { Route as MateriaisEditarMaterialIdImport } from './routes/materiais/editar.$materialId'
+import { Route as MateriaisLigasEspessurasIndexImport } from './routes/materiais/ligas/espessuras/index'
 import { Route as OpsMapahorasEditarOpIdImport } from './routes/ops/mapahoras/editar.$opId'
+import { Route as MateriaisLigasEspessurasAdicionarImport } from './routes/materiais/ligas/espessuras/adicionar'
+import { Route as MateriaisLigasEditarLigaIdImport } from './routes/materiais/ligas/editar.$ligaId'
 
 // Create Virtual Routes
 
@@ -176,10 +179,29 @@ const MateriaisEditarMaterialIdRoute = MateriaisEditarMaterialIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const MateriaisLigasEspessurasIndexRoute =
+  MateriaisLigasEspessurasIndexImport.update({
+    path: '/materiais/ligas/espessuras/',
+    getParentRoute: () => rootRoute,
+  } as any)
+
 const OpsMapahorasEditarOpIdRoute = OpsMapahorasEditarOpIdImport.update({
   path: '/ops/mapahoras/editar/$opId',
   getParentRoute: () => rootRoute,
 } as any)
+
+const MateriaisLigasEspessurasAdicionarRoute =
+  MateriaisLigasEspessurasAdicionarImport.update({
+    path: '/materiais/ligas/espessuras/adicionar',
+    getParentRoute: () => rootRoute,
+  } as any)
+
+const MateriaisLigasEditarLigaIdRoute = MateriaisLigasEditarLigaIdImport.update(
+  {
+    path: '/materiais/ligas/editar/$ligaId',
+    getParentRoute: () => rootRoute,
+  } as any,
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -367,11 +389,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OpsMapahorasIndexImport
       parentRoute: typeof rootRoute
     }
+    '/materiais/ligas/editar/$ligaId': {
+      id: '/materiais/ligas/editar/$ligaId'
+      path: '/materiais/ligas/editar/$ligaId'
+      fullPath: '/materiais/ligas/editar/$ligaId'
+      preLoaderRoute: typeof MateriaisLigasEditarLigaIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/materiais/ligas/espessuras/adicionar': {
+      id: '/materiais/ligas/espessuras/adicionar'
+      path: '/materiais/ligas/espessuras/adicionar'
+      fullPath: '/materiais/ligas/espessuras/adicionar'
+      preLoaderRoute: typeof MateriaisLigasEspessurasAdicionarImport
+      parentRoute: typeof rootRoute
+    }
     '/ops/mapahoras/editar/$opId': {
       id: '/ops/mapahoras/editar/$opId'
       path: '/ops/mapahoras/editar/$opId'
       fullPath: '/ops/mapahoras/editar/$opId'
       preLoaderRoute: typeof OpsMapahorasEditarOpIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/materiais/ligas/espessuras/': {
+      id: '/materiais/ligas/espessuras/'
+      path: '/materiais/ligas/espessuras'
+      fullPath: '/materiais/ligas/espessuras'
+      preLoaderRoute: typeof MateriaisLigasEspessurasIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -406,7 +449,10 @@ export interface FileRoutesByFullPath {
   '/roles/user/adicionar': typeof RolesUserAdicionarRoute
   '/materiais/ligas': typeof MateriaisLigasIndexRoute
   '/ops/mapahoras': typeof OpsMapahorasIndexRoute
+  '/materiais/ligas/editar/$ligaId': typeof MateriaisLigasEditarLigaIdRoute
+  '/materiais/ligas/espessuras/adicionar': typeof MateriaisLigasEspessurasAdicionarRoute
   '/ops/mapahoras/editar/$opId': typeof OpsMapahorasEditarOpIdRoute
+  '/materiais/ligas/espessuras': typeof MateriaisLigasEspessurasIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -436,7 +482,10 @@ export interface FileRoutesByTo {
   '/roles/user/adicionar': typeof RolesUserAdicionarRoute
   '/materiais/ligas': typeof MateriaisLigasIndexRoute
   '/ops/mapahoras': typeof OpsMapahorasIndexRoute
+  '/materiais/ligas/editar/$ligaId': typeof MateriaisLigasEditarLigaIdRoute
+  '/materiais/ligas/espessuras/adicionar': typeof MateriaisLigasEspessurasAdicionarRoute
   '/ops/mapahoras/editar/$opId': typeof OpsMapahorasEditarOpIdRoute
+  '/materiais/ligas/espessuras': typeof MateriaisLigasEspessurasIndexRoute
 }
 
 export interface FileRoutesById {
@@ -467,7 +516,10 @@ export interface FileRoutesById {
   '/roles/user/adicionar': typeof RolesUserAdicionarRoute
   '/materiais/ligas/': typeof MateriaisLigasIndexRoute
   '/ops/mapahoras/': typeof OpsMapahorasIndexRoute
+  '/materiais/ligas/editar/$ligaId': typeof MateriaisLigasEditarLigaIdRoute
+  '/materiais/ligas/espessuras/adicionar': typeof MateriaisLigasEspessurasAdicionarRoute
   '/ops/mapahoras/editar/$opId': typeof OpsMapahorasEditarOpIdRoute
+  '/materiais/ligas/espessuras/': typeof MateriaisLigasEspessurasIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -499,7 +551,10 @@ export interface FileRouteTypes {
     | '/roles/user/adicionar'
     | '/materiais/ligas'
     | '/ops/mapahoras'
+    | '/materiais/ligas/editar/$ligaId'
+    | '/materiais/ligas/espessuras/adicionar'
     | '/ops/mapahoras/editar/$opId'
+    | '/materiais/ligas/espessuras'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -528,7 +583,10 @@ export interface FileRouteTypes {
     | '/roles/user/adicionar'
     | '/materiais/ligas'
     | '/ops/mapahoras'
+    | '/materiais/ligas/editar/$ligaId'
+    | '/materiais/ligas/espessuras/adicionar'
     | '/ops/mapahoras/editar/$opId'
+    | '/materiais/ligas/espessuras'
   id:
     | '__root__'
     | '/'
@@ -557,7 +615,10 @@ export interface FileRouteTypes {
     | '/roles/user/adicionar'
     | '/materiais/ligas/'
     | '/ops/mapahoras/'
+    | '/materiais/ligas/editar/$ligaId'
+    | '/materiais/ligas/espessuras/adicionar'
     | '/ops/mapahoras/editar/$opId'
+    | '/materiais/ligas/espessuras/'
   fileRoutesById: FileRoutesById
 }
 
@@ -588,7 +649,10 @@ export interface RootRouteChildren {
   RolesUserAdicionarRoute: typeof RolesUserAdicionarRoute
   MateriaisLigasIndexRoute: typeof MateriaisLigasIndexRoute
   OpsMapahorasIndexRoute: typeof OpsMapahorasIndexRoute
+  MateriaisLigasEditarLigaIdRoute: typeof MateriaisLigasEditarLigaIdRoute
+  MateriaisLigasEspessurasAdicionarRoute: typeof MateriaisLigasEspessurasAdicionarRoute
   OpsMapahorasEditarOpIdRoute: typeof OpsMapahorasEditarOpIdRoute
+  MateriaisLigasEspessurasIndexRoute: typeof MateriaisLigasEspessurasIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -618,7 +682,11 @@ const rootRouteChildren: RootRouteChildren = {
   RolesUserAdicionarRoute: RolesUserAdicionarRoute,
   MateriaisLigasIndexRoute: MateriaisLigasIndexRoute,
   OpsMapahorasIndexRoute: OpsMapahorasIndexRoute,
+  MateriaisLigasEditarLigaIdRoute: MateriaisLigasEditarLigaIdRoute,
+  MateriaisLigasEspessurasAdicionarRoute:
+    MateriaisLigasEspessurasAdicionarRoute,
   OpsMapahorasEditarOpIdRoute: OpsMapahorasEditarOpIdRoute,
+  MateriaisLigasEspessurasIndexRoute: MateriaisLigasEspessurasIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -659,7 +727,10 @@ export const routeTree = rootRoute
         "/roles/user/adicionar",
         "/materiais/ligas/",
         "/ops/mapahoras/",
-        "/ops/mapahoras/editar/$opId"
+        "/materiais/ligas/editar/$ligaId",
+        "/materiais/ligas/espessuras/adicionar",
+        "/ops/mapahoras/editar/$opId",
+        "/materiais/ligas/espessuras/"
       ]
     },
     "/": {
@@ -740,8 +811,17 @@ export const routeTree = rootRoute
     "/ops/mapahoras/": {
       "filePath": "ops/mapahoras/index.tsx"
     },
+    "/materiais/ligas/editar/$ligaId": {
+      "filePath": "materiais/ligas/editar.$ligaId.tsx"
+    },
+    "/materiais/ligas/espessuras/adicionar": {
+      "filePath": "materiais/ligas/espessuras/adicionar.tsx"
+    },
     "/ops/mapahoras/editar/$opId": {
       "filePath": "ops/mapahoras/editar.$opId.tsx"
+    },
+    "/materiais/ligas/espessuras/": {
+      "filePath": "materiais/ligas/espessuras/index.tsx"
     }
   }
 }

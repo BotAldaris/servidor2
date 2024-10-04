@@ -1,6 +1,7 @@
 import type { Material, PostMaterialRequest } from "@/types/materiais";
 import { createBasicAuthHeader } from "./identity";
 import basebaseurl from "./basebaseurl";
+import type { escolhas } from "@/components/ComboBox";
 
 const baseUrl = `${basebaseurl}materiais`;
 export async function getMateriais(): Promise<Material[]> {
@@ -32,6 +33,23 @@ export async function getMaterialById(id: string): Promise<Material> {
 		throw new Error(`Erro ao pegar o material, erro: ${e}`);
 	}
 }
+
+export async function getMaterialSeletor() : Promise<escolhas[]>{
+	try {
+		const headers = await createBasicAuthHeader();
+		const url = `${baseUrl}/seletor`;
+		const response = await fetch(url, { headers });
+		if (!response.ok) {
+			throw new Error(`erro status: ${response.status}`);
+		}
+		const op = (await response.json()) as escolhas[];
+		return op;
+	} catch (e) {
+		console.log(e);
+		throw new Error(`Erro ao pegar o material, erro: ${e}`);
+	}
+}
+
 
 export async function saveMaterialApi(item: PostMaterialRequest) {
 	const headers = await createBasicAuthHeader();

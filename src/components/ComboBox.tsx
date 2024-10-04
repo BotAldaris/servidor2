@@ -16,7 +16,7 @@ import { ChevronsUpDown, CheckIcon } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
-interface escolhas {
+export interface escolhas {
 	value: string;
 	label: string;
 }

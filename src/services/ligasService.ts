@@ -49,7 +49,7 @@ export async function saveLigaApi(item: PostLigaRequest) {
 	}
 }
 
-export async function putLigaApi(item: PostLigaRequest, id: number) {
+export async function putLigaApi(item: PostLigaRequest, id: string) {
 	const headers = await createBasicAuthHeader();
 	headers.append("Content-Type", "application/json");
 	const base = `${baseUrl}/${id}`;

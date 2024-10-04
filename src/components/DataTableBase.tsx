@@ -11,14 +11,17 @@ import {
 	type ColumnDef,
 	type ColumnFiltersState,
 	type SortingState,
+	type VisibilityState,
 	flexRender,
 	getCoreRowModel,
+	getFacetedRowModel,
+	getFacetedUniqueValues,
 	getFilteredRowModel,
 	getPaginationRowModel,
 	getSortedRowModel,
 	useReactTable,
 } from "@tanstack/react-table";
-import { useState } from "react";
+import { type ElementType, useState } from "react";
 import { Input } from "@/components/ui/input";
 import DataTablePagination from "./DataTablePagination";
 interface DataTableProps<TData, TValue> {
@@ -26,6 +29,7 @@ interface DataTableProps<TData, TValue> {
 	data: TData[];
 	filter: string;
 	nome: string;
+	Toolbar?: ElementType;
 }
 
 export default function DataTableBase<TData, TValue>({
@@ -33,37 +37,52 @@ export default function DataTableBase<TData, TValue>({
 	data,
 	filter,
 	nome,
+	Toolbar,
 }: DataTableProps<TData, TValue>) {
-	const [sorting, setSorting] = useState<SortingState>([]);
-	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-	const table = useReactTable({
-		data,
-		columns,
-		getCoreRowModel: getCoreRowModel(),
-		getPaginationRowModel: getPaginationRowModel(),
-		onSortingChange: setSorting,
-		getSortedRowModel: getSortedRowModel(),
-		onColumnFiltersChange: setColumnFilters,
-		getFilteredRowModel: getFilteredRowModel(),
+const [columnVisibility, setColumnVisibility] =
+	useState<VisibilityState>({});
+const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
+	[],
+);
+const [sorting, setSorting] = useState<SortingState>([]);
 
-		state: {
-			sorting,
-			columnFilters,
-		},
-	});
-
+const table = useReactTable({
+	data,
+	columns,
+	state: {
+		sorting,
+		columnVisibility,
+		columnFilters,
+	},
+	onSortingChange: setSorting,
+	onColumnFiltersChange: setColumnFilters,
+	onColumnVisibilityChange: setColumnVisibility,
+	getCoreRowModel: getCoreRowModel(),
+	getFilteredRowModel: getFilteredRowModel(),
+	getPaginationRowModel: getPaginationRowModel(),
+	getSortedRowModel: getSortedRowModel(),
+	getFacetedRowModel: getFacetedRowModel(),
+	getFacetedUniqueValues: getFacetedUniqueValues(),
+});
+console.log(table.getState())
 	return (
 		<div>
-			<div className="flex items-center py-4">
-				<Input
-					placeholder={`Filtrar ${nome}...`}
-					value={(table.getColumn(filter)?.getFilterValue() as string) ?? ""}
-					onChange={(event) =>
-						table.getColumn(filter)?.setFilterValue(event.target.value)
-					}
-					className="max-w-sm"
-				/>
-			</div>
+			{Toolbar === undefined ? (
+				<div className="flex items-center py-4">
+					<Input
+						placeholder={`Filtrar ${nome}...`}
+						value={(table.getColumn(filter)?.getFilterValue() as string) ?? ""}
+						onChange={(event) =>
+							table.getColumn(filter)?.setFilterValue(event.target.value)
+						}
+						className="max-w-sm"
+					/>
+				</div>
+			) : (
+				
+				<Toolbar table={table}/>
+			)}
+
 			<div className="rounded-md border">
 				<Table>
 					<TableHeader>
