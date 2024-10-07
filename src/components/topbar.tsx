@@ -72,6 +72,16 @@ const materiais: ITopBarDados[] = [
 		href: "/materiais/ligas/adicionar",
 		description: "Adicione uma nova liga",
 	},
+	{
+		title: "Espessuras",
+		href: "/materiais/ligas/espessuras",
+		description: "Todos as espessuras em um lugar.",
+	},
+	{
+		title: "Adicionar Espessura",
+		href: "/materiais/ligas/espessuras/adicionar",
+		description: "Adicione uma nova espessuras",
+	},
 ];
 const components: ITopBarDados[] = [
 	{

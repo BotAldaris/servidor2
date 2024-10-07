@@ -1,10 +1,17 @@
 import { z } from "zod";
 
-export interface Espessura {
+export interface SimpleEspessura {
 	id: string;
 	numero: number;
 	preco: number;
 	ligaId: string;
+}
+export interface Espessura {
+	id: string;
+	numero: number;
+	preco: number;
+	liga: string;
+	material: string;
 }
 export interface PostEspessuraRequest {
 	numero: number;

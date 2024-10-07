@@ -1,43 +1,52 @@
 import type { escolhas } from "@/components/ComboBox";
 import { EspessuraForm } from "@/components/materiais/espessurassForm";
 import { useToast } from "@/components/ui/use-toast";
-import { saveEspessuraApi } from "@/services/espessurasService";
+import {
+	getEspessuraById,
+	saveEspessuraApi,
+} from "@/services/espessurasService";
 import { getLigaSeletor } from "@/services/ligasService";
 import { getMaterialSeletor } from "@/services/materiais";
-import type { ZEspessura } from "@/types/espessuras";
+import type { SimpleEspessura, ZEspessura } from "@/types/espessuras";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import type { z } from "zod";
 
-async function pegarDados(): Promise<{
+async function pegarDados(espessuraId: string): Promise<{
 	materiais: escolhas[];
 	ligas: Map<string, escolhas[]>;
+	espessura: SimpleEspessura;
 }> {
-	const [materiais, ligas] = await Promise.all([
+	const [materiais, ligas, espessura] = await Promise.all([
 		getMaterialSeletor(),
 		getLigaSeletor(),
+		getEspessuraById(espessuraId),
 	]);
 	const result = [];
 	for (const material of materiais) {
 		result.push({ label: material.label, value: material.label } as escolhas);
 	}
-	return { materiais: result, ligas };
+	return { materiais: result, ligas, espessura };
 }
 
-const adicionarEspesssuraQuery = queryOptions({
-	queryKey: ["espessurra", "adicionar"],
-	queryFn: () => pegarDados(),
-});
+const editarEspesssuraQuery = (espessuraId: string) =>
+	queryOptions({
+		queryKey: ["espessurra", "editar", espessuraId],
+		queryFn: () => pegarDados(espessuraId),
+	});
 
-export const Route = createFileRoute("/materiais/ligas/espessuras/adicionar")({
-	loader: ({ context: { queryClient } }) => {
-		queryClient.ensureQueryData(adicionarEspesssuraQuery);
+export const Route = createFileRoute(
+	"/materiais/ligas/espessuras/editar/$espessuraId",
+)({
+	loader: ({ context: { queryClient }, params }) => {
+		queryClient.ensureQueryData(editarEspesssuraQuery(params.espessuraId));
 	},
-	component: () => <AddEspessura />,
+	component: () => <EditEspessura />,
 });
 
-function AddEspessura() {
-	const { data } = useSuspenseQuery(adicionarEspesssuraQuery);
+function EditEspessura() {
+	const { espessuraId } = Route.useParams();
+	const { data } = useSuspenseQuery(editarEspesssuraQuery(espessuraId));
 	const navigate = useNavigate();
 	const { toast } = useToast();
 	async function onSubmit(values: z.infer<typeof ZEspessura>) {
@@ -59,7 +68,7 @@ function AddEspessura() {
 			<EspessuraForm
 				onSubmit={onSubmit}
 				materiais={data.materiais}
-				espessura={{ numero: 0, preco: 0, ligaId: "" }}
+				espessura={data.espessura}
 				ligas={data.ligas}
 			/>
 		</div>

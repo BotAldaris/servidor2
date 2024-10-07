@@ -1,7 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "../ui/form";
 import { Input } from "../ui/input";
 import Combobox, { type escolhas } from "../ComboBox";
 import { Button } from "../ui/button";
@@ -10,20 +17,20 @@ import { useState } from "react";
 
 interface IProps {
 	onSubmit: (values: z.infer<typeof ZEspessura>) => void;
-	liga: PostEspessuraRequest;
-	materiais: escolhas[]
-	ligas: Map<string,escolhas[]>
+	espessura: PostEspessuraRequest;
+	materiais: escolhas[];
+	ligas: Map<string, escolhas[]>;
 }
 
 export function EspessuraForm(props: IProps) {
-	if (props.materiais.length === 0 || props.ligas.size === 0){
-		return <h1>Adicione uma liga e um material antes de comecar</h1>
+	if (props.materiais.length === 0 || props.ligas.size === 0) {
+		return <h1>Adicione uma liga e um material antes de comecar</h1>;
 	}
 
-	const [material,setMaterial] = useState(props.materiais[0].value)
+	const [material, setMaterial] = useState(props.materiais[0].value);
 	const form = useForm<z.infer<typeof ZEspessura>>({
 		resolver: zodResolver(ZEspessura),
-		defaultValues: { ...props.liga },
+		defaultValues: { ...props.espessura },
 	});
 	return (
 		<Form {...form}>
@@ -44,7 +51,7 @@ export function EspessuraForm(props: IProps) {
 						</FormItem>
 					)}
 				/>
-                <FormField
+				<FormField
 					control={form.control}
 					name="preco"
 					render={({ field }) => (
@@ -58,29 +65,32 @@ export function EspessuraForm(props: IProps) {
 					)}
 				/>
 				<Combobox
-                                escolhas={props.materiais}
-                                menssageInput="Escolha o Material..."
-                                menssageSearch="Procure por Material..."
-                                messageEmpty="Nenhum Material encontrado."
-                                menssageLabel="Material"
-                                value={material}
-                                setValue={(x) => setMaterial(x)}
-                            />
-                <FormField
+					escolhas={props.materiais}
+					menssageInput="Escolha o Material..."
+					menssageSearch="Procure por Material..."
+					messageEmpty="Nenhum Material encontrado."
+					menssageLabel="Material"
+					value={material}
+					setValue={(x) => {
+						setMaterial(x);
+						form.setValue("ligaId", "");
+					}}
+				/>
+				<FormField
 					control={form.control}
 					name="ligaId"
 					render={({ field }) => (
 						<FormItem>
 							<FormControl>
-                            <Combobox
-                                escolhas={props.ligas.get(material) ?? []}
-                                menssageInput="Escolha a Liga..."
-                                menssageSearch="Procure por Liga..."
-                                messageEmpty="Nenhum Liga encontrado."
-                                menssageLabel="Liga"
-                                value={field.value}
-                                setValue={(x) => form.setValue("ligaId",x)}
-                            />
+								<Combobox
+									escolhas={props.ligas.get(material) ?? []}
+									menssageInput="Escolha a Liga..."
+									menssageSearch="Procure por Liga..."
+									messageEmpty="Nenhum Liga encontrado."
+									menssageLabel="Liga"
+									value={field.value}
+									setValue={(x) => form.setValue("ligaId", x)}
+								/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>

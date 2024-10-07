@@ -1,6 +1,10 @@
 import { createBasicAuthHeader } from "./identity";
 import basebaseurl from "./basebaseurl";
-import type { Espessura, PostEspessuraRequest } from "@/types/espessuras";
+import type {
+	Espessura,
+	PostEspessuraRequest,
+	SimpleEspessura,
+} from "@/types/espessuras";
 
 const baseUrl = `${basebaseurl}espessuras`;
 export async function getEspessuras(): Promise<Espessura[]> {
@@ -17,7 +21,7 @@ export async function getEspessuras(): Promise<Espessura[]> {
 		throw new Error(`Erro ao pegar as espessuras, erro: ${e}`);
 	}
 }
-export async function getEspessuraById(id: string): Promise<Espessura> {
+export async function getEspessuraById(id: string): Promise<SimpleEspessura> {
 	try {
 		const headers = await createBasicAuthHeader();
 		const url = `${baseUrl}/${id}`;
@@ -25,7 +29,7 @@ export async function getEspessuraById(id: string): Promise<Espessura> {
 		if (!response.ok) {
 			throw new Error(`erro status: ${response.status}`);
 		}
-		const espessura = (await response.json()) as Espessura;
+		const espessura = (await response.json()) as SimpleEspessura;
 		return espessura;
 	} catch (e) {
 		console.log(e);

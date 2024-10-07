@@ -35,7 +35,7 @@ export async function getLigaById(id: string): Promise<SimpleLiga> {
 	}
 }
 
-export async function getLigaSeletor() : Promise<Map<string,escolhas[]>>{
+export async function getLigaSeletor(): Promise<Map<string, escolhas[]>> {
 	try {
 		const headers = await createBasicAuthHeader();
 		const url = `${baseUrl}/seletor/material`;
@@ -43,7 +43,11 @@ export async function getLigaSeletor() : Promise<Map<string,escolhas[]>>{
 		if (!response.ok) {
 			throw new Error(`erro status: ${response.status}`);
 		}
-		const liga = (await response.json()) as Map<string,escolhas[]>;
+		const liga = new Map(Object.entries(await response.json())) as Map<
+			string,
+			escolhas[]
+		>;
+		console.log(liga);
 		return liga;
 	} catch (e) {
 		console.log(e);
