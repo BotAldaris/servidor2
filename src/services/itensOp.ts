@@ -8,9 +8,9 @@ import type {
 import { createBasicAuthHeader } from "./identity";
 import type { StatusItemOp } from "@/types/op";
 import type { ITableFaceted } from "@/types/tableFaceted";
+import basebaseurl from "./basebaseurl";
 
-const baseUrl = "http://192.168.2.223:5000/api/itensOp";
-// const baseUrl = "http://localhost:5000/api/itensOp";
+const baseUrl = `${basebaseurl}itensOp`;
 
 export async function getItensOp(): Promise<IItemOp[]> {
 	try {

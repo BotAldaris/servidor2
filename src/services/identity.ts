@@ -1,8 +1,8 @@
 import type { Logar, Tokens } from "@/types/Roles";
 import { addSeconds } from "date-fns";
+import basebaseurl from "./basebaseurl";
 
-const baseUrl = "http://192.168.2.223:5000/api/";
-// const baseUrl = "http://localhost:5000/api/";
+const baseUrl = `${basebaseurl}`;
 
 export const isAuthenticated = () => !!localStorage.getItem("refresh_token");
 

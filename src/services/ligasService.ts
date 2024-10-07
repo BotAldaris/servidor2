@@ -2,6 +2,7 @@ import { createBasicAuthHeader } from "./identity";
 import basebaseurl from "./basebaseurl";
 import type Liga from "@/types/ligas";
 import type { PostLigaRequest, SimpleLiga } from "@/types/ligas";
+import type { escolhas } from "@/components/ComboBox";
 
 const baseUrl = `${basebaseurl}ligas`;
 export async function getLigas(): Promise<Liga[]> {
@@ -34,6 +35,21 @@ export async function getLigaById(id: string): Promise<SimpleLiga> {
 	}
 }
 
+export async function getLigaSeletor() : Promise<Map<string,escolhas[]>>{
+	try {
+		const headers = await createBasicAuthHeader();
+		const url = `${baseUrl}/seletor/material`;
+		const response = await fetch(url, { headers });
+		if (!response.ok) {
+			throw new Error(`erro status: ${response.status}`);
+		}
+		const liga = (await response.json()) as Map<string,escolhas[]>;
+		return liga;
+	} catch (e) {
+		console.log(e);
+		throw new Error(`Erro ao pegar a liga, erro: ${e}`);
+	}
+}
 export async function saveLigaApi(item: PostLigaRequest) {
 	const headers = await createBasicAuthHeader();
 	headers.append("Content-Type", "application/json");

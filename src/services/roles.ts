@@ -1,9 +1,9 @@
 import type Roles from "@/types/Roles";
 import type { PostAddRoleToUser, PostRole } from "@/types/Roles";
 import { createBasicAuthHeader } from "./identity";
+import basebaseurl from "./basebaseurl";
 
-const baseUrl = "http://192.168.2.223:5000/api/roles";
-// const baseUrl = "http://localhost:5000/api/roles";
+const baseUrl =`${basebaseurl}roles`;
 
 export async function getRoles(): Promise<Roles[]> {
 	try {

@@ -10,9 +10,9 @@ import type {
 } from "@/types/op";
 import { createBasicAuthHeader } from "./identity";
 import type { IItemOp } from "@/types/itensOp";
+import basebaseurl from "./basebaseurl";
 
-const baseUrl = "http://192.168.2.223:5000/api/ops";
-// const baseUrl = "http://localhost:5000/api/ops";
+const baseUrl = `${basebaseurl}ops`;
 
 export async function getOps(): Promise<Op[]> {
 	try {
