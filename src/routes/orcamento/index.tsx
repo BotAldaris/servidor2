@@ -25,7 +25,7 @@ export const Route = createFileRoute("/orcamento/")({
 function Orcamento() {
 	const [plano, setPlano] = useState<PlanoOrcamento>();
 	return (
-		<div className="flex  flex-col justify-center items-center w-full">
+		<div className="flex  flex-col justify-center items-center w-full gap-2">
 			<MapaForm setPlano={setPlano} />
 			{plano && (
 				<OrcamentoTable
