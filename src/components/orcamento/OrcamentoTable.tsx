@@ -18,9 +18,27 @@ export default function OrcamentoTable(propis: IProps) {
   const [preco, setPreco] = useState(0);
   const [precoLaser, setPrecoLaser] = useState(0);
   const [porcentagemLucro, setPorcentagemLucro] = useState(0);
+  const [dobras, setDobras] = useState(
+    propis.itens.map((item) => item.dobra) // Inicializa com os valores atuais da dobra
+  );
+  const [calderarias, setCalderarias] = useState(
+    propis.itens.map((item) => item.calderaria) // Inicializa com os valores atuais da dobra
+  );
+  const [usinagens, setUsinagens] = useState(
+    propis.itens.map((item) => item.dobra) // Inicializa com os valores atuais da dobra
+  );
+  const [pinturas, setPinturas] = useState(
+    propis.itens.map((item) => item.dobra) // Inicializa com os valores atuais da dobra
+  );
+  const [dobras, setDobras] = useState(
+    propis.itens.map((item) => item.dobra) // Inicializa com os valores atuais da dobra
+  );
   const custoLaser =
     propis.itens.reduce((z, y) => z + y.tempo * y.quantidade, 0) / 3600;
-  const vc = custoLaser * precoLaser;
+  const custoDobra = propis.itens
+    .entries()
+    .reduce((x, y) => x + dobras[y[0]] * y[1].quantidade, 0);
+  const vc = custoLaser * precoLaser + custoDobra;
   const custo = propis.volume * preco * 1.05 * material * tipo;
   const lucroMinimo = custo / 4;
   const valorDeVenda = custo * (1 + porcentagemLucro) + vc;
@@ -41,6 +59,7 @@ export default function OrcamentoTable(propis: IProps) {
     setPrecoLaser,
     setPorcentagemLucro,
   };
+
   return (
     <div className="w-2/3">
       <OrcamentoTopBar
@@ -55,10 +74,15 @@ export default function OrcamentoTable(propis: IProps) {
       <OrcamentoTableTable
         venda={tipo === 1}
         itens={propis.itens}
-        espessura={propis.espessura}
         valorLaser={precoLaser}
         valorMaterial={preco * 1.05 * (1 + porcentagemLucro)}
         densidade={material}
+        dobras={dobras}
+        setDobras={setDobras}
+        calderarias={calderarias}
+        setCalderarias={setCalderarias}
+        usinagens={usinagens}
+        setUsinagem={setUsinagens}
       />
     </div>
   );
@@ -72,9 +96,10 @@ interface IPropsIcone {
 function Icone(props: IPropsIcone) {
   const resultado = props.valor - props.total / 4;
   console.log("res: ", resultado);
-  if (resultado == 0) {
+  if (resultado === 0) {
     return <AnnoyedIcon />;
-  } else if (resultado > 0) {
+  }
+  if (resultado > 0) {
     return <SmilePlus />;
   }
   return <FrownIcon />;

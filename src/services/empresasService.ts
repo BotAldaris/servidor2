@@ -1,6 +1,7 @@
 import { createBasicAuthHeader } from "./identity";
 import basebaseurl from "./basebaseurl";
 import type { Empresa, PostEmpresaRequest } from "@/types/empresas";
+import { fetch } from "@tauri-apps/plugin-http";
 
 const baseUrl = `${basebaseurl}empresas`;
 export async function getEmpresas(): Promise<Empresa[]> {
