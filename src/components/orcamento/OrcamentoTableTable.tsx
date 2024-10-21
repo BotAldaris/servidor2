@@ -24,7 +24,7 @@ interface IProps {
   setUsinagem: React.Dispatch<React.SetStateAction<number[]>>;
   pinturas: number[];
   setPinturas: React.Dispatch<React.SetStateAction<number[]>>;
-  Insumos: number[];
+  insumos: number[];
   setInsumos: React.Dispatch<React.SetStateAction<number[]>>;
 }
 export default function OrcamentoTableTable(props: IProps) {
@@ -148,7 +148,7 @@ export default function OrcamentoTableTable(props: IProps) {
                     index,
                     Number(e.target.value),
                     props.setInsumos,
-                    props.Insumos
+                    props.insumos
                   )
                 }
                 className="border"

@@ -2,26 +2,20 @@ import type { Logar, Tokens } from "@/types/Roles";
 import { addSeconds } from "date-fns";
 import basebaseurl from "./basebaseurl";
 import { fetch } from "@tauri-apps/plugin-http";
-import { createStore, Store } from "@tauri-apps/plugin-store";
+import { createStore } from "@tauri-apps/plugin-store";
 
 const baseUrl = `${basebaseurl}`;
 const store = await createStore("settings.bin");
-export const isAuthenticated = () => !!localStorage.getItem("refresh_token");
 
 async function setTokens(dados: Tokens, data: Date) {
-  await store.set("acesss_token", dados.accessToken);
-  await store.save();
+  await store.set("acesss_token", dados.accessToken)
   await store.set("refresh_token", dados.refreshToken);
-  await store.save();
   await store.set("expire", addSeconds(data, dados.expiresIn).toISOString());
   await store.save();
 }
-
 export async function resetTokens() {
   await store.delete("acesss_token");
-  await store.save();
   await store.delete("refresh_token");
-  await store.save();
   await store.delete("expire");
   await store.save();
 }
@@ -40,6 +34,19 @@ const getToken = async () => {
   }
   return accessToken;
 };
+
+export const isAuth = async () => {
+  try {
+    const token = await getToken()
+    if (token === "") {
+      return false
+    }
+    return true
+  } catch {
+    return false
+  }
+}
+
 
 export async function createBasicAuthHeader(): Promise<Headers> {
   const token = await getToken();
@@ -92,6 +99,7 @@ export async function logar(dados: Logar) {
     throw `Erro ao logar: ${text}`;
   }
   const result = (await response.json()) as Tokens;
+  console.log(result)
   await setTokens(result, data);
 }
 export async function register(dados: Logar) {

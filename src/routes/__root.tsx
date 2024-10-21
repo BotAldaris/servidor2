@@ -12,7 +12,7 @@ interface MyRouterContext {
 export const Route = createRootRouteWithContext<MyRouterContext>()({
 	component: () => (
 		<>
-			<Topbar />
+		<Topbar/> 
 			<Outlet />
 			<Toaster />
 		</>

@@ -30,15 +30,28 @@ export default function OrcamentoTable(propis: IProps) {
   const [pinturas, setPinturas] = useState(
     propis.itens.map((item) => item.dobra) // Inicializa com os valores atuais da dobra
   );
-  const [dobras, setDobras] = useState(
+  const [insumos, setInsumos] = useState(
     propis.itens.map((item) => item.dobra) // Inicializa com os valores atuais da dobra
   );
   const custoLaser =
     propis.itens.reduce((z, y) => z + y.tempo * y.quantidade, 0) / 3600;
-  const custoDobra = propis.itens
+    const custoDobra = propis.itens
     .entries()
     .reduce((x, y) => x + dobras[y[0]] * y[1].quantidade, 0);
-  const vc = custoLaser * precoLaser + custoDobra;
+    const custoCalderaria = propis.itens
+    .entries()
+    .reduce((x, y) => x + calderarias[y[0]] * y[1].quantidade, 0);
+    const custoUsinagem = propis.itens
+    .entries()
+    .reduce((x, y) => x + usinagens[y[0]] * y[1].quantidade, 0);
+    const custoPintura = propis.itens
+    .entries()
+    .reduce((x, y) => x + pinturas[y[0]] * y[1].quantidade, 0);
+    const custoInsumos = propis.itens
+    .entries()
+    .reduce((x, y) => x + insumos[y[0]] * y[1].quantidade, 0);
+    
+  const vc = custoLaser * precoLaser + custoDobra  + custoCalderaria + custoUsinagem + custoPintura + custoInsumos;
   const custo = propis.volume * preco * 1.05 * material * tipo;
   const lucroMinimo = custo / 4;
   const valorDeVenda = custo * (1 + porcentagemLucro) + vc;
@@ -83,6 +96,10 @@ export default function OrcamentoTable(propis: IProps) {
         setCalderarias={setCalderarias}
         usinagens={usinagens}
         setUsinagem={setUsinagens}
+        pinturas={pinturas}
+        setPinturas={setPinturas}
+        insumos={insumos}
+        setInsumos={setInsumos}
       />
     </div>
   );
