@@ -16,6 +16,7 @@ export interface ItemPlanoOrcamento {
   calderaria: number;
   usinagem: number;
   pintura: number;
+  insumo: number;
 }
 
 export interface PlanoOrcamento {
@@ -25,6 +26,9 @@ export interface PlanoOrcamento {
   espessura: number;
   duracao: number;
   itens: ItemPlanoOrcamento[];
+  materialId: string;
+  ligaId: string;
+  espessuraId: string;
 }
 
 export interface PlanoOrcamentoTable {

@@ -8,7 +8,8 @@ const baseUrl = `${basebaseurl}`;
 const store = await createStore("settings.bin");
 
 async function setTokens(dados: Tokens, data: Date) {
-  await store.set("acesss_token", dados.accessToken)
+  // await logar_tokens();
+  await store.set("acesss_token", dados.accessToken);
   await store.set("refresh_token", dados.refreshToken);
   await store.set("expire", addSeconds(data, dados.expiresIn).toISOString());
   await store.save();
@@ -20,8 +21,18 @@ export async function resetTokens() {
   await store.save();
 }
 
+async function logar_tokens() {
+  const acess = await store.get("acesss_token");
+  const refresh = await store.get("refresh_token");
+  const expire = await store.get("expire");
+  console.log(`acess: ${acess}`);
+  console.log(`refresh: ${refresh}`);
+  console.log(`expire: ${expire}`);
+}
+
 const getToken = async () => {
   const accessToken = (await store.get("acesss_token")) as string;
+  // await logar_tokens();
   if (accessToken == null) {
     return await refreshToken();
   }
@@ -37,16 +48,15 @@ const getToken = async () => {
 
 export const isAuth = async () => {
   try {
-    const token = await getToken()
+    const token = await getToken();
     if (token === "") {
-      return false
+      return false;
     }
-    return true
+    return true;
   } catch {
-    return false
+    return false;
   }
-}
-
+};
 
 export async function createBasicAuthHeader(): Promise<Headers> {
   const token = await getToken();
@@ -59,7 +69,7 @@ export async function createBasicAuthHeader(): Promise<Headers> {
 }
 
 async function refreshToken() {
-  const refreshToken = localStorage.getItem("refresh_token");
+  const refreshToken = await store.get("refresh_token");
   if (refreshToken == null) {
     return "";
   }
@@ -74,9 +84,11 @@ async function refreshToken() {
   });
   if (!response.ok) {
     const text = await response.text();
+    console.log("oi2");
     throw `Erro ao atulizar o seu token de acesso, erro: ${text}`;
   }
   const dados = (await response.json()) as Tokens;
+  console.log(dados);
   await setTokens(dados, data);
   return dados.accessToken;
 }
@@ -99,7 +111,7 @@ export async function logar(dados: Logar) {
     throw `Erro ao logar: ${text}`;
   }
   const result = (await response.json()) as Tokens;
-  console.log(result)
+  console.log(result);
   await setTokens(result, data);
 }
 export async function register(dados: Logar) {

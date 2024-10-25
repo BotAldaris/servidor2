@@ -1,58 +1,89 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import OrcamentoToolBar from "./OrcamentoToolBar";
 import OrcamentoTableTable from "./OrcamentoTableTable";
-import type { ItemPlanoOrcamento } from "@/types/orcamento";
+import type {
+  ItemPlanoOrcamento,
+  PlanoOrcamentoTable,
+} from "@/types/orcamento";
 import { AnnoyedIcon, FrownIcon, SmilePlus } from "lucide-react";
 import OrcamentoTopBar from "./OrcamentoTopBar";
+import { OrcamentoTopTopBar } from "./OrcamentoTopTopBar";
+import { Button } from "../ui/button";
+import type { escolhas } from "../ComboBox";
 
 interface IProps {
   itens: ItemPlanoOrcamento[];
   espessura: number;
   volume: number;
+  plano: PlanoOrcamentoTable;
+  setOrcamento: (item: PlanoOrcamentoTable) => void;
+  index: number;
+  setIndex: React.Dispatch<React.SetStateAction<number>>;
+  length: number;
+  espessuras: Map<string, escolhas[]>;
+  materiais: escolhas[];
+  ligas: Map<string, escolhas[]>;
 }
 
 export default function OrcamentoTable(propis: IProps) {
   const [tipo, setTipo] = useState(1);
-  const [material, setMaterial] = useState(8);
+  const [densidade, setDensidade] = useState(8);
   const [imposto, setImposto] = useState(0.1145);
-  const [preco, setPreco] = useState(0);
+  const [espessura, setEspessura] = useState(
+    propis.plano.planoOrcamento.espessuraId
+  );
+  const [ligaId, setLigaId] = useState(propis.plano.planoOrcamento.ligaId);
+  const [materialId, setMaterialId] = useState(
+    propis.plano.planoOrcamento.materialId
+  );
+  const [preco, setPreco] = useState(propis.plano.preco);
   const [precoLaser, setPrecoLaser] = useState(0);
-  const [porcentagemLucro, setPorcentagemLucro] = useState(0);
-  const [dobras, setDobras] = useState(
-    propis.itens.map((item) => item.dobra) // Inicializa com os valores atuais da dobra
+  const [porcentagemLucro, setPorcentagemLucro] = useState(
+    propis.plano.porcentagem
   );
-  const [calderarias, setCalderarias] = useState(
-    propis.itens.map((item) => item.calderaria) // Inicializa com os valores atuais da dobra
-  );
-  const [usinagens, setUsinagens] = useState(
-    propis.itens.map((item) => item.dobra) // Inicializa com os valores atuais da dobra
-  );
-  const [pinturas, setPinturas] = useState(
-    propis.itens.map((item) => item.dobra) // Inicializa com os valores atuais da dobra
-  );
-  const [insumos, setInsumos] = useState(
-    propis.itens.map((item) => item.dobra) // Inicializa com os valores atuais da dobra
-  );
+  const [dobras, setDobras] = useState([] as number[]);
+  const [calderarias, setCalderarias] = useState([] as number[]);
+  const [usinagens, setUsinagens] = useState([] as number[]);
+  const [pinturas, setPinturas] = useState([] as number[]);
+  const [insumos, setInsumos] = useState([] as number[]);
+
+  useEffect(() => {
+    setDobras(propis.itens.map((item) => item.dobra || 0));
+    setCalderarias(propis.itens.map((item) => item.calderaria || 0));
+    setUsinagens(propis.itens.map((item) => item.usinagem || 0));
+    setPinturas(propis.itens.map((item) => item.pintura || 0));
+    setInsumos(propis.itens.map((item) => item.insumo || 0));
+    setEspessura(propis.plano.planoOrcamento.espessuraId);
+    setLigaId(propis.plano.planoOrcamento.ligaId);
+    setMaterialId(propis.plano.planoOrcamento.materialId);
+    setPreco(propis.plano.preco);
+    setPorcentagemLucro(propis.plano.porcentagem);
+  }, [propis]);
   const custoLaser =
     propis.itens.reduce((z, y) => z + y.tempo * y.quantidade, 0) / 3600;
-    const custoDobra = propis.itens
+  const custoDobra = propis.itens
     .entries()
     .reduce((x, y) => x + dobras[y[0]] * y[1].quantidade, 0);
-    const custoCalderaria = propis.itens
+  const custoCalderaria = propis.itens
     .entries()
     .reduce((x, y) => x + calderarias[y[0]] * y[1].quantidade, 0);
-    const custoUsinagem = propis.itens
+  const custoUsinagem = propis.itens
     .entries()
     .reduce((x, y) => x + usinagens[y[0]] * y[1].quantidade, 0);
-    const custoPintura = propis.itens
+  const custoPintura = propis.itens
     .entries()
     .reduce((x, y) => x + pinturas[y[0]] * y[1].quantidade, 0);
-    const custoInsumos = propis.itens
+  const custoInsumos = propis.itens
     .entries()
     .reduce((x, y) => x + insumos[y[0]] * y[1].quantidade, 0);
-    
-  const vc = custoLaser * precoLaser + custoDobra  + custoCalderaria + custoUsinagem + custoPintura + custoInsumos;
-  const custo = propis.volume * preco * 1.05 * material * tipo;
+  const vc =
+    custoLaser * precoLaser +
+    custoDobra +
+    custoCalderaria +
+    custoUsinagem +
+    custoPintura +
+    custoInsumos;
+  const custo = propis.volume * preco * 1.05 * densidade * tipo;
   const lucroMinimo = custo / 4;
   const valorDeVenda = custo * (1 + porcentagemLucro) + vc;
   const vdd = valorDeVenda * 0.8855 - custo - vc * 0.9307;
@@ -60,21 +91,55 @@ export default function OrcamentoTable(propis: IProps) {
     (custo + lucroMinimo + vc * 0.9307) / (0.8855 * custo) - vc / custo - 1;
   const props = {
     tipo,
-    material,
+    densidade,
     imposto,
     preco,
     precoLaser,
     porcentagemLucro,
+    espessura,
+    ligaId,
+    materialId,
     setTipo,
-    setMaterial,
+    setDensidade,
     setImposto,
     setPreco,
     setPrecoLaser,
     setPorcentagemLucro,
+    setEspessura,
+    setLigaId,
+    setMaterialId,
+    espessuras: propis.espessuras,
+    materiais: propis.materiais,
+    ligas: propis.ligas,
   };
-
+  function salvarPlano() {
+    const novoPlano = propis.plano;
+    novoPlano.porcentagem = porcentagemLucro;
+    novoPlano.preco = preco;
+    novoPlano.planoOrcamento.materialId = materialId;
+    novoPlano.planoOrcamento.ligaId = ligaId;
+    novoPlano.planoOrcamento.espessuraId = espessura;
+    const itens = [];
+    for (let i = 0; i < propis.itens.length; i++) {
+      const item = propis.itens[i];
+      item.calderaria = calderarias[i];
+      item.dobra = dobras[i];
+      item.usinagem = usinagens[i];
+      item.pintura = pinturas[i];
+      item.insumo = insumos[i];
+      itens.push(item);
+      novoPlano.planoOrcamento.itens = itens;
+    }
+    propis.setOrcamento(novoPlano);
+  }
   return (
-    <div className="w-2/3">
+    <div className="w-4/5 flex flex-col gap-2">
+      <OrcamentoTopTopBar
+        index={propis.index}
+        setIndex={propis.setIndex}
+        length={propis.length}
+        setPlano={salvarPlano}
+      />
       <OrcamentoTopBar
         valorTotal={valorDeVenda}
         valorMaterial={custo}
@@ -89,7 +154,7 @@ export default function OrcamentoTable(propis: IProps) {
         itens={propis.itens}
         valorLaser={precoLaser}
         valorMaterial={preco * 1.05 * (1 + porcentagemLucro)}
-        densidade={material}
+        densidade={densidade}
         dobras={dobras}
         setDobras={setDobras}
         calderarias={calderarias}
@@ -101,6 +166,7 @@ export default function OrcamentoTable(propis: IProps) {
         insumos={insumos}
         setInsumos={setInsumos}
       />
+      <Button onClick={salvarPlano}>Salvar</Button>
     </div>
   );
 }

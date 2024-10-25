@@ -6,6 +6,7 @@ import { fetch } from "@tauri-apps/plugin-http";
 const baseUrl = `${basebaseurl}orcamento`;
 
 export async function orcar(file): Promise<PlanoOrcamento> {
+  console.time("orcamento");
   const formData = new FormData();
   formData.append("file", file);
   const headers = await createBasicAuthHeader();
@@ -26,8 +27,13 @@ export async function orcar(file): Promise<PlanoOrcamento> {
     item.usinagem = 0;
     item.pintura = 0;
     item.dobra = 0;
+    item.insumo = 0;
     itens.push(item);
   }
   result.itens = itens;
+  result.espessuraId = "";
+  result.materialId = "";
+  result.ligaId = "";
+  console.timeEnd("orcamento");
   return result;
 }

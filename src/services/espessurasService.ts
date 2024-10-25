@@ -6,6 +6,7 @@ import type {
   SimpleEspessura,
 } from "@/types/espessuras";
 import { fetch } from "@tauri-apps/plugin-http";
+import type { escolhas } from "@/components/ComboBox";
 
 const baseUrl = `${basebaseurl}espessuras`;
 export async function getEspessuras(): Promise<Espessura[]> {
@@ -37,7 +38,24 @@ export async function getEspessuraById(id: string): Promise<SimpleEspessura> {
     throw new Error(`Erro ao pegar a espessura, erro: ${e}`);
   }
 }
-
+export async function getEspessuraSeletor(): Promise<Map<string, escolhas[]>> {
+  try {
+    const headers = await createBasicAuthHeader();
+    const url = `${baseUrl}/seletor/material`;
+    const response = await fetch(url, { headers });
+    if (!response.ok) {
+      throw new Error(`erro: ${await response.text()}`);
+    }
+    const espessura = new Map(Object.entries(await response.json())) as Map<
+      string,
+      escolhas[]
+    >;
+    return espessura;
+  } catch (e) {
+    console.log(e);
+    throw new Error(`Erro ao pegar a liga, erro: ${e}`);
+  }
+}
 export async function saveEspessuraApi(item: PostEspessuraRequest) {
   const headers = await createBasicAuthHeader();
   headers.append("Content-Type", "application/json");
